@@ -1,4 +1,4 @@
-public class StillTerm.App : Gtk.Application {
+public class StillTerminal.App : Gtk.Application {
     // Member variables
 
     // Constructor
@@ -21,6 +21,6 @@ public class StillTerm.App : Gtk.Application {
 }
 
 int main (string[] args) {
-    var my_app = new StillTerm.App ();
+    var my_app = new StillTerminal.App ();
     return my_app.run (args);
 }

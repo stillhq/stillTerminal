@@ -1,4 +1,4 @@
-public class StillTerm.MainWindow : Gtk.ApplicationWindow {
+public class StillTerminal.MainWindow : Gtk.ApplicationWindow {
     // GLib.ListStore clocks_list_store;
     public MainWindow (Gtk.Application app) {
         Object (application: app);

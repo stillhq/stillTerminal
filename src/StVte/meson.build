@@ -3,4 +3,5 @@ sources += files(
   'StTerminalPage.vala',
   'StTerminalSettings.vala',
   'StColorScheme.vala',
+  'StProfile.vala',
 )
