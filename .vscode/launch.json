@@ -9,7 +9,7 @@
             "type": "lldb",
             "request": "launch",
             "name": "Debug",
-            "program": "${workspaceFolder}/build/src/stillterm",
+            "program": "${workspaceFolder}/build/src/stillTerminal",
             "args": [],
             "cwd": "${workspaceFolder}",
             "preLaunchTask": "build debug meson"

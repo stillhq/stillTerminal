@@ -3,7 +3,7 @@ public class StillTerm.App : Gtk.Application {
 
     // Constructor
     public App () {
-        Object (application_id: "io.stillhq.sstillTerm",
+        Object (application_id: "io.stillhq.stillTerminal",
                 flags : GLib.ApplicationFlags.FLAGS_NONE
         );
     }

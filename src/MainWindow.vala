@@ -9,20 +9,8 @@ public class StillTerm.MainWindow : Gtk.ApplicationWindow {
         var header = new Gtk.HeaderBar ();
         this.set_titlebar (header);
 
-        var label = new Gtk.Label ("Hello World!");
-        label.hexpand = label.vexpand = true;
-
-        var button = new Gtk.Button.with_label ("Click Me!");
-
-        button.clicked.connect (() => {
-          var str = label.label;
-          var temp_str = str.reverse ();
-          label.label = temp_str;
-        });
-
         var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 10);
-        box.append (label);
-        box.append (button);
+        box.append (new StTerminal ());
 
         this.child = box;
     }
