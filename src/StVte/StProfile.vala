@@ -2,7 +2,7 @@ namespace StillTerminal {
     public class StProfile {
         public string id;
         public string name;
-        public StColorScheme color_scheme;
+        public StColorScheme? color_scheme;
         public string working_directory;
         public string spawn_command;
         public string? distrobox_id;
@@ -27,8 +27,7 @@ namespace StillTerminal {
             return new StProfile(
                 obj.get_string_member("id"),
                 obj.get_string_member("name"),
-                // In quotes as placeholder
-                "StColorScheme.new_from_json(obj.get_object(color_scheme json directory))",
+                null, //"StColorScheme.new_from_json(obj.get_object(color_scheme json directory))",
                 obj.get_string_member("working_directory"),
                 obj.get_string_member("spawn_command"),
                 obj.get_string_member("distrobox_id")

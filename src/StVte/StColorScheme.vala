@@ -270,7 +270,7 @@ namespace StillTerminal {
             };
         }
 
-        public StColorScheme new_from_json(string filename) {
+        public static StColorScheme? new_from_json(string filename) {
             // Each json will have a light and dark hash with the colors
             
             try {
@@ -281,7 +281,7 @@ namespace StillTerminal {
 
                 string id = obj.get_string_member ("id");
                 string name = obj.get_string_member ("name");
-                
+
                 // Extract light and dark color schemes
                 Json.Object light = obj.get_object_member("light");
                 Json.Object dark = obj.get_object_member("dark");
@@ -333,10 +333,18 @@ namespace StillTerminal {
                     dark.get_string_member("bright_white")
                 );
             } catch (GLib.Error e) {
-                print ("Placeholder, invalid json file")
+                return null;
             }
         }
 
+        public static StColorScheme? new_from_id(string id) {
+            var available_schemes = get_available_schemes();
+            if (available_schemes.has_key(id)) {
+                return new_from_json(available_schemes[id]);
+            }
+            return null;
+        }
+    }
     
     public string[] get_scheme_dirs() {
         string[] user_dirs = {};
@@ -350,14 +358,25 @@ namespace StillTerminal {
     }
 
     public Gee.HashMap<string, string> get_available_schemes() {
+        Gee.HashMap<string, string> available_schemes = new Gee.HashMap<string, string>();
         string[] dirs = get_scheme_dirs();
         foreach (string dir_path in dirs) {
             GLib.Dir dir = GLib.Dir.open(dir_path);
-            while ((string file = dir.read_name()) != null) {
-                if (file.has_suffix(".json")) {
-                    print (file);
+            string? filename = dir.read_name();
+            while (filename != null) {
+                if (filename.has_suffix(".json")) {
+                    // try loading json to check if it's valid
+                    try {
+                        Json.Parser parser = new Json.Parser();
+                        parser.load_from_file (filename);
+                        string id = parser.get_root().get_object().get_string_member("id");
+                        if (StColorScheme.new_from_json (dir_path + "/" + filename) != null) {
+                            available_schemes[id] = dir_path + "/" + filename;
+                        }
+                    } catch (GLib.Error e) {}
                 }
             }
         }
+        return available_schemes;
     }
 }
