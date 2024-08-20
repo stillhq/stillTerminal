@@ -270,6 +270,27 @@ namespace StillTerminal {
             };
         }
 
+        public Gdk.RGBA[] get_dark_rgba_palette () {
+            Gdk.RGBA[] palette = new Gdk.RGBA[16];
+            palette[0].parse (this.dark_black);
+            palette[1].parse (this.dark_red);
+            palette[2].parse (this.dark_green);
+            palette[3].parse (this.dark_yellow);
+            palette[4].parse (this.dark_blue);
+            palette[5].parse (this.dark_magenta);
+            palette[6].parse (this.dark_cyan);
+            palette[7].parse (this.dark_white);
+            palette[8].parse (this.dark_bright_black);
+            palette[9].parse (this.dark_bright_red);
+            palette[10].parse (this.dark_bright_green);
+            palette[11].parse (this.dark_bright_yellow);
+            palette[12].parse (this.dark_bright_blue);
+            palette[13].parse (this.dark_bright_magenta);
+            palette[14].parse (this.dark_bright_cyan);
+            palette[15].parse (this.dark_bright_white);
+            return palette;
+        }
+
         public static StColorScheme? new_from_json(string filename) {
             // Each json will have a light and dark hash with the colors
             
@@ -357,8 +378,13 @@ namespace StillTerminal {
         return user_dirs;
     }
 
-    public Gee.HashMap<string, string> get_available_schemes() {
+    public Gee.HashMap<string, string> get_available_schemes () {
         Gee.HashMap<string, string> available_schemes = new Gee.HashMap<string, string>();
+
+        // THIS IS FOR TESTING PURPOSES
+        // TODO: Remove this
+        available_schemes["default"] = "/home/cameronknauff/Documents/stillTerminal/src/schemes/default.json";
+        
         string[] dirs = get_scheme_dirs();
         try {
             foreach (string dir_path in dirs) {

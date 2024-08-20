@@ -15,4 +15,3 @@ public class StillTerminal.MainWindow : Adw.ApplicationWindow {
         this.content = box;
     }
 }
- 

@@ -8,8 +8,8 @@ namespace StillTerminal {
         public string? distrobox_id;
 
         public StProfile (
-            string id, string name, StColorScheme? color_scheme, string working_directory, string? spawn_command,
-            string? distrobox_id = null
+            string id, string name, StColorScheme? color_scheme, string working_directory,
+            string? distrobox_id = null, string? spawn_command = null
         ) {
             this.id = id;
             this.name = name;
@@ -31,12 +31,21 @@ namespace StillTerminal {
             return new StProfile(
                 obj.get_string_member("id"),
                 obj.get_string_member("name"),
-                null, //"StColorScheme.new_from_json(obj.get_object(color_scheme json directory))",
+                StColorScheme.new_from_id("default"),
                 obj.get_string_member("working_directory"),
                 obj.get_string_member("spawn_command"),
                 obj.get_string_member("distrobox_id")
             );
 
         }
+    }
+
+    public StProfile get_system_profile() {
+        return new StProfile(
+            "system",
+            "System",
+            StColorScheme.new_from_id("default"),
+            GLib.Environment.get_home_dir()
+        );
     }
 }
