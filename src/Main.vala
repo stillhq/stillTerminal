@@ -1,4 +1,4 @@
-public class StillTerminal.App : Gtk.Application {
+public class StillTerminal.App : Adw.Application {
     // Member variables
 
     // Constructor

@@ -360,23 +360,25 @@ namespace StillTerminal {
     public Gee.HashMap<string, string> get_available_schemes() {
         Gee.HashMap<string, string> available_schemes = new Gee.HashMap<string, string>();
         string[] dirs = get_scheme_dirs();
-        foreach (string dir_path in dirs) {
-            GLib.Dir dir = GLib.Dir.open(dir_path);
-            string? filename = dir.read_name();
-            while (filename != null) {
-                if (filename.has_suffix(".json")) {
-                    // try loading json to check if it's valid
-                    try {
-                        Json.Parser parser = new Json.Parser();
-                        parser.load_from_file (filename);
-                        string id = parser.get_root().get_object().get_string_member("id");
-                        if (StColorScheme.new_from_json (dir_path + "/" + filename) != null) {
-                            available_schemes[id] = dir_path + "/" + filename;
-                        }
-                    } catch (GLib.Error e) {}
+        try {
+            foreach (string dir_path in dirs) {
+                GLib.Dir dir = GLib.Dir.open(dir_path);
+                string? filename = dir.read_name();
+                while (filename != null) {
+                    if (filename.has_suffix(".json")) {
+                        // try loading json to check if it's valid
+                        try {
+                            Json.Parser parser = new Json.Parser();
+                            parser.load_from_file (filename);
+                            string id = parser.get_root().get_object().get_string_member("id");
+                            if (StColorScheme.new_from_json (dir_path + "/" + filename) != null) {
+                                available_schemes[id] = dir_path + "/" + filename;
+                            }
+                        } catch (GLib.Error e) {}
+                    }
                 }
             }
-        }
+        } catch (GLib.FileError e) {}
         return available_schemes;
     }
 }

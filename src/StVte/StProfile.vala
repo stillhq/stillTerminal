@@ -8,7 +8,7 @@ namespace StillTerminal {
         public string? distrobox_id;
 
         public StProfile (
-            string id, string name, StColorScheme color_scheme, string working_directory, string spawn_command,
+            string id, string name, StColorScheme? color_scheme, string working_directory, string spawn_command,
             string? distrobox_id = null
         ) {
             this.id = id;
@@ -19,9 +19,13 @@ namespace StillTerminal {
             this.spawn_command = spawn_command;
         }
 
-        public StProfile new_from_json(string filename) {
+        public StProfile? new_from_json(string filename) {
             Json.Parser parser = new Json.Parser();
-            parser.load_from_file (filename);
+            try {
+                parser.load_from_file (filename);
+            } catch (GLib.Error e) {
+                return null;
+            }
 
             Json.Object obj = parser.get_root().get_object();
             return new StProfile(
