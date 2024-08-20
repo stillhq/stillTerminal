@@ -13,22 +13,7 @@ namespace StillTerminal {
         }
 
         public void spawn_profile (StProfile profile) {
-            // Set color scheme
-            Gdk.RGBA bold_color = new Gdk.RGBA ();
-            bold_color.parse ( profile.color_scheme.dark_bold_color );
-            this.vte.set_color_cursor ( bold_color );
-
-            Gdk.RGBA cursor_color = new Gdk.RGBA ();
-            cursor_color.parse ( profile.color_scheme.dark_cursor_color );
-            this.vte.set_color_cursor ( cursor_color );
-
-            Gdk.RGBA background_color = new Gdk.RGBA ();
-            background_color.parse ( profile.color_scheme.dark_background_color );
-            Gdk.RGBA foreground_color = new Gdk.RGBA ();
-            foreground_color.parse ( profile.color_scheme.dark_foreground_color );
-            this.vte.set_colors ( 
-                background_color, foreground_color, profile.color_scheme.get_dark_rgba_palette () );
-
+            set_colorscheme (profile.color_scheme);
             // Spawn terminal
             this.vte.spawn_async (
                 Vte.PtyFlags.DEFAULT,
@@ -44,6 +29,9 @@ namespace StillTerminal {
         }
 
         public string[] get_spawn_list (StProfile profile) {
+            if (profile.spawn_command == null) {
+                return new string[] {GLib.Environment.get_variable ("SHELL")};
+            }
             string[] args = profile.spawn_command.split(" ");
             if (args.length == 0) {
                 return new string[] {GLib.Environment.get_variable ("SHELL")};
@@ -65,6 +53,25 @@ namespace StillTerminal {
                 shell_cmd += arg;
             }
             return shell_cmd;
+        }
+
+        public void set_colorscheme (StColorScheme color_scheme) {
+            // Set color scheme
+            Gdk.RGBA bold_color = Gdk.RGBA ();
+            bold_color.parse ( color_scheme.dark_bold_color );
+            this.vte.set_color_cursor ( bold_color );
+
+            Gdk.RGBA cursor_color = Gdk.RGBA ();
+            cursor_color.parse ( color_scheme.dark_cursor_color );
+            this.vte.set_color_cursor ( cursor_color );
+
+            Gdk.RGBA background_color = Gdk.RGBA ();
+            background_color.parse ( color_scheme.dark_background_color );
+            Gdk.RGBA foreground_color = Gdk.RGBA ();
+            foreground_color.parse ( color_scheme.dark_foreground_color );
+            this.vte.set_colors ( 
+                foreground_color, background_color, color_scheme.get_dark_rgba_palette ()
+            );
         }
     }
 }

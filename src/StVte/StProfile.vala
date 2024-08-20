@@ -36,7 +36,6 @@ namespace StillTerminal {
                 obj.get_string_member("spawn_command"),
                 obj.get_string_member("distrobox_id")
             );
-
         }
     }
 

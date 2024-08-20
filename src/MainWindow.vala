@@ -6,7 +6,7 @@ public class StillTerminal.MainWindow : Adw.ApplicationWindow {
         this.default_height = 400;
         this.default_width = 600;
 
-        var header = new Gtk.HeaderBar ();
+        // var header = new Gtk.HeaderBar ();
         // this.set_titlebar (header);
 
         var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 10);

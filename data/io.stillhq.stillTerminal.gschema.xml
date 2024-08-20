@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="io.stillhq.terminal" path="/io/stillhq/terminal/">
+    <key name="window-width" type="i">
+      <default>800</default>
+      <summary>Window Width</summary>
+      <description>The width of the window.</description>
+    </key>
+    <key name="window-height" type="i">
+      <default>600</default>
+      <summary>Window Height</summary>
+      <description>The height of the window.</description>
+    </key>
+    <key name="keep-window-size" type="b">
+      <default>false</default>
+      <summary>Keep Window Size</summary>
+      <description>Whether to keep the window size between sessions.</description>
+    </key>
+    <key name="use-custom-font" type="b">
+      <default>false</default>
+      <summary>Use Custom Font</summary>
+      <description>Whether to use a custom font.</description>
+    </key>
+    <key name="custom-font" type="s">
+      <default>'Source Code Pro 11'</default>
+      <summary>Custom Font</summary>
+      <description>The custom font to use.</description>
+    </key>
+    <key name="cell-height" type="d">
+      <default>1</default>
+      <summary>Cell Height</summary>
+      <description>The height of a cell.</description>
+    </key>
+    <key name="cell-width" type="d">
+      <default>1</default>
+      <summary>Cell Width</summary>
+      <description>The width of a cell.</description>
+    </key>
+    <key name="bold-is-bright" type="b">
+      <default>false</default>
+      <summary>Bold is Bright</summary>
+      <description>Whether bold text is displayed as bright.</description>
+    </key>
+    <key name="easy-copy-paste" type="b">
+      <default>true</default>
+      <summary>Easy Copy Paste</summary>
+      <description>Whether to enable easy copy-paste.</description>
+    </key>
+    <key name="system-color" type="s">
+      <default>'default'</default>
+      <summary>System Color</summary>
+      <description>The system color to use.</description>
+    </key>
+    <key name="use-profile-color" type="b">
+      <default>true</default>
+      <summary>Use Profile Color</summary>
+      <description>Whether to use the profile color.</description>
+    </key>
+    <key name="use-tab-color" type="b">
+      <default>false</default>
+      <summary>Use Tab Color</summary>
+      <description>Whether to use the tab color.</description>
+    </key>
+    <key name="padding" type="i">
+      <default>0</default>
+      <summary>Padding</summary>
+      <description>The padding to use.</description>
+    </key>
+    <key name="opacity" type="i">
+      <default>100</default>
+      <summary>Opacity</summary>
+      <description>The opacity level.</description>
+    </key>
+    <key name="show-scrollbar" type="b">
+      <default>true</default>
+      <summary>Show Scrollback</summary>
+      <description>Show terminal scrollbars.</description>
+    </key>
+    <key name="scrollback-limit" type="i">
+      <default>1000</default>
+      <summary>Scrollback Limit</summary>
+      <description>The scrollback limit.</description>
+    </key>
+  </schema>
+</schemalist>
