@@ -81,5 +81,10 @@
       <summary>Scrollback Limit</summary>
       <description>The scrollback limit.</description>
     </key>
+    <key name="notification-on-task" type="b">
+      <default>true</default>
+      <summary>Notification on Finished Task</summary>
+      <description>Sends a notification when the terminal is not focused and a task has finished.</description>
+    </key>
   </schema>
 </schemalist>

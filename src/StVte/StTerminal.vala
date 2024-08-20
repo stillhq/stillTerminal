@@ -3,13 +3,14 @@ namespace StillTerminal {
         public Vte.Terminal vte;
         public StColorScheme color_scheme;
 
-        public StTerminal () {
+        public StTerminal (StTerminalSettings settings) {
             Object ();
             this.vte = new Vte.Terminal ();
             this.vte.vexpand = true;
             this.vte.hexpand = true;
             this.child = this.vte;
             this.spawn_profile (get_system_profile ());
+            settings.bind_to_vte (this, this.vte);
         }
 
         public void spawn_profile (StProfile profile) {

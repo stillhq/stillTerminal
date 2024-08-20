@@ -3,6 +3,7 @@ public class StillTerminal.MainWindow : Adw.ApplicationWindow {
     public MainWindow (Adw.Application app) {
         Object (application: app);
 
+        StillTerminal.StTerminalSettings settings = new StillTerminal.StTerminalSettings ();
         this.default_height = 400;
         this.default_width = 600;
 
@@ -10,7 +11,7 @@ public class StillTerminal.MainWindow : Adw.ApplicationWindow {
         // this.set_titlebar (header);
 
         var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 10);
-        box.append (new StTerminal ());
+        box.append (new StTerminal (settings));
 
         this.content = box;
     }

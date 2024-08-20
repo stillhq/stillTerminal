@@ -1,48 +1,66 @@
-class StTerminalSettings {
-    // General Settings
-    int window_width;
-    int window_height;
-    bool keep_window_size;
-    bool use_custom_font;
-    string custom_font;
-    double cell_height;
-    double cell_width;
-    bool bold_is_bright;
-    bool easy_copy_paste;
-
-    // Appearance
-    string system_color;
-    bool use_profile_color;
-    bool use_tab_color;
-    int padding;
-    int opacity;
-
-    // Scroll
-    bool show_scrollbar;
-    int scrollback_limit;
-
-    // Misc
-    bool notification_on_task;
-
-
-    public StTerminalSettings () {
-        GLib.Settings settings = new GLib.Settings ("io.stillhq.terminal");
-        this.window_width = settings.get_int ("window_width");
-        this.window_height = settings.get_int ("window_height");
-        this.keep_window_size = settings.get_boolean ("keep_window_size");
-        this.use_custom_font = settings.get_boolean ("use_custom_font");
-        this.custom_font = settings.get_string ("custom_font");
-        this.cell_height = settings.get_double ("cell_height");
-        this.cell_width = settings.get_double ("cell_width");
-        this.bold_is_bright = settings.get_boolean ("bold_is_bright");
-        this.easy_copy_paste = settings.get_boolean ("easy_copy_paste");
-        this.system_color = settings.get_string ("system_color");
-        this.use_profile_color = settings.get_boolean ("use_profile_color");
-        this.use_tab_color = settings.get_boolean ("use_tab_color");
-        this.padding = settings.get_int ("padding");
-        this.opacity = settings.get_int ("opacity");
-        this.show_scrollbar = settings.get_boolean ("show_scrollbar");
-        this.scrollback_limit = settings.get_int ("scrollback_limit");
-        this.notification_on_task = settings.get_boolean ("notification_on_task");
+namespace StillTerminal {
+    public class StTerminalSettings : GLib.Object {
+        // General Settings
+        public int window_width { get; set; }
+        public int window_height { get; set; }
+        public bool keep_window_size { get; set; }
+        public bool use_custom_font { get; set; }
+        public string custom_font { get; set; }
+        public double cell_height { get; set; }
+        public double cell_width { get; set; }
+        public bool bold_is_bright { get; set; }
+        public bool easy_copy_paste { get; set; }
+    
+        // Appearance
+        public string system_color { get; set; }
+        public bool use_profile_color { get; set; }
+        public bool use_tab_color { get; set; }
+        public int padding { get; set; }
+        public int opacity { get; set; }
+    
+        // Scroll
+        public bool show_scrollbar { get; set; }
+        public int scrollback_limit { get; set; }
+    
+        // Misc
+        public bool notification_on_task { get; set; }
+        public GLib.Settings settings = new GLib.Settings ("io.stillhq.terminal");
+    
+        public StTerminalSettings () {
+            settings.bind ("window-width", this, "window_width", SettingsBindFlags.DEFAULT);
+            settings.bind ("window-height", this, "window_height", SettingsBindFlags.DEFAULT);
+            settings.bind ("keep-window-size", this, "keep_window_size", SettingsBindFlags.DEFAULT);
+            settings.bind ("use-custom-font", this, "use_custom_font", SettingsBindFlags.DEFAULT);
+            settings.bind ("custom-font", this, "custom_font", SettingsBindFlags.DEFAULT);
+            settings.bind ("cell-height", this, "cell_height", SettingsBindFlags.DEFAULT);
+            settings.bind ("cell-width", this, "cell_width", SettingsBindFlags.DEFAULT);
+            settings.bind ("bold-is-bright", this, "bold_is_bright", SettingsBindFlags.DEFAULT);
+            settings.bind ("easy-copy-paste", this, "easy_copy_paste", SettingsBindFlags.DEFAULT);
+            settings.bind ("system-color", this, "system_color", SettingsBindFlags.DEFAULT);
+            settings.bind ("use-profile-color", this, "use_profile_color", SettingsBindFlags.DEFAULT);
+            settings.bind ("use-tab-color", this, "use_tab_color", SettingsBindFlags.DEFAULT);
+            settings.bind ("padding", this, "padding", SettingsBindFlags.DEFAULT);
+            settings.bind ("opacity", this, "opacity", SettingsBindFlags.DEFAULT);
+            settings.bind ("show-scrollbar", this, "show_scrollbar", SettingsBindFlags.DEFAULT);
+            settings.bind ("scrollback-limit", this, "scrollback_limit", SettingsBindFlags.DEFAULT);
+            settings.bind ("notification-on-task", this, "notification_on_task", SettingsBindFlags.DEFAULT);
+        }
+    
+        public void bind_to_window (Gtk.Window window) {
+            settings.bind ("window-width", window, "default_width", SettingsBindFlags.DEFAULT);
+            settings.bind ("window-height", window, "default_height", SettingsBindFlags.DEFAULT);
+        }
+    
+        public void bind_to_vte (Adw.Bin bin, Vte.Terminal vte) {
+            settings.bind ("cell-height", vte, "cell_height_scale", SettingsBindFlags.DEFAULT);
+            settings.bind ("cell-width", vte, "cell_width_scale", SettingsBindFlags.DEFAULT);
+            settings.bind ("bold-is-bright", vte, "bold_is_bright", SettingsBindFlags.DEFAULT);
+            settings.bind ("scrollback-limit", vte, "scrollback_lines", SettingsBindFlags.DEFAULT);
+    
+            settings.bind ("padding", bin, "margin-start", SettingsBindFlags.DEFAULT);
+            settings.bind ("padding", bin, "margin-end", SettingsBindFlags.DEFAULT);
+            settings.bind ("padding", bin, "margin-top", SettingsBindFlags.DEFAULT);
+            settings.bind ("padding", bin, "margin-bottom", SettingsBindFlags.DEFAULT);
+        }
     }
 }
