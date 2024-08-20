@@ -9,6 +9,7 @@ namespace StillTerminal {
             this.vte.vexpand = true;
             this.vte.hexpand = true;
             this.child = this.vte;
+            this.vte.set_enable_fallback_scrolling(false);
             this.spawn_profile (get_system_profile ());
             settings.bind_to_vte (this, this.vte);
         }
@@ -70,7 +71,7 @@ namespace StillTerminal {
             background_color.parse ( color_scheme.dark_background_color );
             Gdk.RGBA foreground_color = Gdk.RGBA ();
             foreground_color.parse ( color_scheme.dark_foreground_color );
-            this.vte.set_colors ( 
+            this.vte.set_colors (
                 foreground_color, background_color, color_scheme.get_dark_rgba_palette ()
             );
         }
