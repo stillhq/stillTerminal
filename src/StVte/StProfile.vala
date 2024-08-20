@@ -4,19 +4,19 @@ namespace StillTerminal {
         public string name;
         public StColorScheme? color_scheme;
         public string working_directory;
-        public string spawn_command;
+        public string? spawn_command;
         public string? distrobox_id;
 
         public StProfile (
-            string id, string name, StColorScheme? color_scheme, string working_directory, string spawn_command,
+            string id, string name, StColorScheme? color_scheme, string working_directory, string? spawn_command,
             string? distrobox_id = null
         ) {
             this.id = id;
             this.name = name;
-            this.distrobox_id = distrobox_id;
             this.color_scheme = color_scheme;
             this.working_directory = working_directory;
             this.spawn_command = spawn_command;
+            this.distrobox_id = distrobox_id;
         }
 
         public StProfile? new_from_json(string filename) {

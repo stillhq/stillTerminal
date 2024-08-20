@@ -12,33 +12,41 @@ namespace StillTerminal {
         }
 
         public void spawn_profile (StProfile profile) {
-            var env = new string[1];
-            //  this.vte.spawn_async (
-            //      Vte.PtyFlags.DEFAULT,
-            //      profile.working_directory,
-            //      new string[] { profile.spawn_command.split(" ") },
-            //      env,
-            //      Vte.SpawnFlags.DEFAULT,
-            //      null,
-            //      null,
-            //      null
-            //  );
+            this.vte.spawn_async (
+                Vte.PtyFlags.DEFAULT,
+                profile.working_directory,
+                get_spawn_list (profile),
+                null,
+                GLib.SpawnFlags.SEARCH_PATH,
+                null,
+                -1,
+                null,
+                null
+            );
         }
 
         public string[] get_spawn_list (StProfile profile) {
             string[] args = profile.spawn_command.split(" ");
+            if (args.length == 0) {
+                return new string[] {GLib.Environment.get_variable ("SHELL")};
+            }
             if (profile.distrobox_id != null) {
-                return ["distrobox", "enter", "-n", profile.distrobox_id, "--"] + args;
-            }
-            try {
-                GLib.File file = GLib.File.new_for_path(args[0]);
-                bool file_exists = file.query_exists();
-                if (file_exists) {
-                    return args;
-                } else {
-                    return ["distrobox", "enter", "-n", "default", "--"] + args;
+                string[] distrobox_cmd = {"/bin/distrobox", "enter", "-n", profile.distrobox_id, "--"};
+                foreach (string arg in args) {
+                    distrobox_cmd += arg;
                 }
+                return args;
             }
+
+            GLib.File file = GLib.File.new_for_path(args[0]);
+            if (file.query_exists ()) {
+                return args;
+            }
+            string[] shell_cmd = {GLib.Environment.get_variable ("SHELL"), "-c"};
+            foreach (string arg in args) {
+                shell_cmd += arg;
+            }
+            return shell_cmd;
         }
     }
 }
