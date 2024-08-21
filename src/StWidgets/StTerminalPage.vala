@@ -5,7 +5,7 @@ namespace StillTerminal {
         public StTerminal terminal;
         public Gtk.ScrolledWindow scrolled_window;
 
-        public StTerminalPage (StTerminalSettings settings, StProfile profile) {
+        public StTerminalPage (StSettings settings, StProfile profile) {
             terminal = new StTerminal(settings);
             scrolled_window = new Gtk.ScrolledWindow();
             scrolled_window.set_overlay_scrolling (true);

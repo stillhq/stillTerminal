@@ -1,5 +1,5 @@
 namespace StillTerminal {
-    public class StTerminalSettings : GLib.Object {
+    public class StSettings : GLib.Object {
         // General Settings
         public int window_width { get; set; }
         public int window_height { get; set; }
@@ -26,7 +26,7 @@ namespace StillTerminal {
         public bool notification_on_task { get; set; }
         public GLib.Settings settings = new GLib.Settings ("io.stillhq.terminal");
     
-        public StTerminalSettings () {
+        public StSettings () {
             settings.bind ("window-width", this, "window_width", SettingsBindFlags.DEFAULT);
             settings.bind ("window-height", this, "window_height", SettingsBindFlags.DEFAULT);
             settings.bind ("keep-window-size", this, "keep_window_size", SettingsBindFlags.DEFAULT);

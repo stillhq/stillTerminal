@@ -2,5 +2,6 @@
     "C_Cpp.default.compileCommands": "/home/cameronknauff/Documents/stillTerminal/builddir/compile_commands.json",
     "editor.rulers": [
         120
-    ]
+    ],
+    "C_Cpp.default.configurationProvider": "mesonbuild.mesonbuild"
 }

@@ -1,0 +1,29 @@
+/* Custom Headerbar COPIED from Blackbox */
+
+.custom-headerbar windowhandle > box {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+window:not(.about) headerbar,
+.custom-headerbar {
+    background-color: @window_bg_color;
+}
+
+.custom-headerbar windowcontrols:not(.empty).start {
+    margin-right: 6px;
+}
+
+.custom-headerbar windowcontrols.start.empty ~ tabbar {
+    margin-left: -6px;
+}
+
+.custom-headerbar windowcontrols:not(.empty).end {
+    margin-left: 6px;
+}
+  
+.custom-headerbar.with-dragarea:not(.single-tab-mode)
+    windowcontrols.start.empty
+    ~ tabbar {
+    margin-left: 34px;
+}

@@ -3,7 +3,8 @@ sources = files(
   'MainWindow.vala',
 )
 
-subdir('StVte')
+subdir('StTerminal')
+subdir('StWidgets')
 
 dependencies = [
   dependency('glib-2.0'),

@@ -3,7 +3,7 @@ namespace StillTerminal {
         public Vte.Terminal vte;
         public StColorScheme color_scheme;
 
-        public StTerminal (StTerminalSettings settings) {
+        public StTerminal (StSettings settings) {
             Object ();
             this.vte = new Vte.Terminal ();
             this.vte.vexpand = true;
