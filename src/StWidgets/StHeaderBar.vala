@@ -1,6 +1,6 @@
 namespace StillTerminal {
     public class StHeaderBar : Adw.Bin {
-        Adw.HeaderBar header_bar;
+        Gtk.HeaderBar header_bar;
         Adw.TabBar tab_bar;
         Gtk.Button new_tab_button;
         Gtk.Button settings_button;
@@ -10,13 +10,14 @@ namespace StillTerminal {
             this.header_bar.add_css_class ("flat");
             this.tab_bar.add_css_class ("flat");
 
-            this.header_bar = new Adw.HeaderBar ();
+            this.header_bar = new Gtk.HeaderBar ();
             this.tab_bar = new Adw.TabBar ();
-            this.header_bar.set_title_widget (this.tab_bar);
-            this.header_bar.set_centering_policy(Adw.CenteringPolicy.LOOSE);
-            this.tab_bar.hexpand = true;
-            this.tab_bar.halign = Gtk.Align.FILL;
+            //this.header_bar.set_centering_policy(Adw.CenteringPolicy.LOOSE);
+            //this.header_bar.set_show_title(false);
+            this.tab_bar.set_hexpand (true);
+            this.tab_bar.set_halign (Gtk.Align.FILL);
             this.tab_bar.set_view(main_window.tab_view);
+            this.header_bar.pack_start (this.tab_bar);
             this.child = this.header_bar;
 
             this.new_tab_button = new Gtk.Button.from_icon_name ("list-add-symbolic");
@@ -26,7 +27,7 @@ namespace StillTerminal {
             this.new_tab_button.valign = Gtk.Align.CENTER;
             this.new_tab_button.halign = Gtk.Align.CENTER;
             this.new_tab_button.add_css_class ("circular");
-            this.header_bar.pack_start (this.new_tab_button);
+            this.header_bar.pack_end (this.new_tab_button);
 
             this.settings_button = new Gtk.Button.from_icon_name ("settings-symbolic");
             this.settings_button.clicked.connect (() => {

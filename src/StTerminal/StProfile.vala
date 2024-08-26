@@ -37,6 +37,40 @@ namespace StillTerminal {
                 obj.get_string_member("distrobox_id")
             );
         }
+
+        public Gee.HashMap<string, string> as_hash() {
+            Gee.HashMap<string, string> hash = new Gee.HashMap<string, string> ();
+            hash["id"] = this.id;
+            hash["name"] = this.name;
+            hash["working_directory"] = this.working_directory;
+            hash["spawn_command"] = this.spawn_command;
+            hash["distrobox_id"] = this.distrobox_id;
+            return hash;
+        }
+
+        public void save_to_json(string filename) {
+            var hash = this.as_hash();
+            var builder = new Json.Builder();
+            builder.begin_object();
+
+            var hash_iter = hash.map_iterator();
+            hash.foreach((entry) => {
+                builder.set_member_name(entry.key);
+                builder.add_string_value(entry.value);
+                return true;
+            });
+
+            builder.end_object();
+
+            var generator = new Json.Generator();
+            generator.set_root(builder.get_root());
+
+            try {
+                generator.to_file(filename);
+            } catch (GLib.Error e) {
+                print("Error saving profile to file: %s\n".printf(e.message));
+            }
+        }
     }
 
     public StProfile get_system_profile() {
