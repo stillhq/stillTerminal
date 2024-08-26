@@ -2,13 +2,13 @@ namespace StillTerminal {
     public class StProfile {
         public string id;
         public string name;
-        public StColorScheme? color_scheme;
+        public string color_scheme;
         public string working_directory;
         public string? spawn_command;
         public string? distrobox_id;
 
         public StProfile (
-            string id, string name, StColorScheme? color_scheme, string working_directory,
+            string id, string name, string color_scheme, string working_directory,
             string? distrobox_id = null, string? spawn_command = null
         ) {
             this.id = id;
@@ -31,7 +31,7 @@ namespace StillTerminal {
             return new StProfile(
                 obj.get_string_member("id"),
                 obj.get_string_member("name"),
-                StColorScheme.new_from_id("default"),
+                obj.get_string_member("color-scheme"),
                 obj.get_string_member("working_directory"),
                 obj.get_string_member("spawn_command"),
                 obj.get_string_member("distrobox_id")
@@ -77,7 +77,7 @@ namespace StillTerminal {
         return new StProfile(
             "system",
             "System",
-            StColorScheme.new_from_id("default"),
+            "system",
             GLib.Environment.get_home_dir()
         );
     }

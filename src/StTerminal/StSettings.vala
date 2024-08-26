@@ -46,11 +46,6 @@ namespace StillTerminal {
             settings.bind ("notification-on-task", this, "notification_on_task", SettingsBindFlags.DEFAULT);
         }
     
-        public void bind_to_window (Gtk.Window window) {
-            settings.bind ("window-width", window, "default_width", SettingsBindFlags.DEFAULT);
-            settings.bind ("window-height", window, "default_height", SettingsBindFlags.DEFAULT);
-        }
-    
         public void bind_to_vte (Adw.Bin bin, Vte.Terminal vte) {
             settings.bind ("cell-height", vte, "cell_height_scale", SettingsBindFlags.DEFAULT);
             settings.bind ("cell-width", vte, "cell_width_scale", SettingsBindFlags.DEFAULT);

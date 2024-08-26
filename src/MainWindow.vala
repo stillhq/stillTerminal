@@ -3,7 +3,6 @@
     public Adw.TabBar tab_bar;
     public Adw.TabView tab_view;
     public StillTerminal.StSettings settings;
-    public int call_times = 0;
 
     public MainWindow (Adw.Application app) {
         Object (application: app);
@@ -41,8 +40,6 @@
     }
 
     public override void size_allocate (int width, int height, int baseline) {
-        print (this.call_times.to_string() + "\n");
-        this.call_times += 1;
         if (this.settings.keep_window_size) {
             this.settings.window_width = width;
             this.settings.window_height = height;

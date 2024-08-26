@@ -2,20 +2,28 @@ namespace StillTerminal {
     public class StTerminal : Adw.Bin {
         public Vte.Terminal vte;
         public StColorScheme color_scheme;
+        public StSettings settings;
+        public Pango.FontDescription default_font_desc;
 
         public StTerminal (StSettings settings) {
             Object ();
+            this.settings = settings;
+
             this.vte = new Vte.Terminal ();
             this.vte.vexpand = true;
             this.vte.hexpand = true;
             this.child = this.vte;
             this.vte.set_enable_fallback_scrolling(false);
+
+            // Used if custom font is disabled
+            this.default_font_desc = this.vte.get_font ().copy ();
+
             this.spawn_profile (get_system_profile ());
-            settings.bind_to_vte (this, this.vte);
+            this.settings.bind_to_vte (this, this.vte);
         }
 
         public void spawn_profile (StProfile profile) {
-            set_colorscheme (profile.color_scheme);
+            set_appearance (profile.color_scheme);
             // Spawn terminal
             this.vte.spawn_async (
                 Vte.PtyFlags.DEFAULT,
@@ -57,7 +65,12 @@ namespace StillTerminal {
             return shell_cmd;
         }
 
-        public void set_colorscheme (StColorScheme color_scheme) {
+        public void set_appearance (string color_scheme_name) {
+            if (color_scheme_name == "system") {
+                color_scheme_name = this.settings.system_color;
+            }
+            this.color_scheme = StColorScheme.new_from_id(color_scheme_name);
+
             // Set color scheme
             Gdk.RGBA bold_color = Gdk.RGBA ();
             bold_color.parse ( color_scheme.dark_bold_color );
@@ -74,6 +87,14 @@ namespace StillTerminal {
             this.vte.set_colors (
                 foreground_color, background_color, color_scheme.get_dark_rgba_palette ()
             );
+
+            // Set font
+            if (this.settings.use_custom_font) {
+                var font_desc = Pango.FontDescription.from_string (this.settings.custom_font);
+                this.vte.set_font (font_desc);
+            } else {
+                this.vte.set_font (this.default_font_desc);
+            }
         }
     }
 }

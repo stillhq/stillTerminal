@@ -383,7 +383,7 @@ namespace StillTerminal {
 
         // THIS IS FOR TESTING PURPOSES
         // TODO: Remove this
-        available_schemes["default"] = "/home/cameronknauff/Documents/stillTerminal/data/schemes/default.json";
+        available_schemes["adwaita"] = "/home/cameronknauff/Documents/stillTerminal/data/schemes/default.json";
         
         string[] dirs = get_scheme_dirs();
         try {
