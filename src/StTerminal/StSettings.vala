@@ -3,13 +3,8 @@ namespace StillTerminal {
         // General Settings
         public int window_width { get; set; }
         public int window_height { get; set; }
-        public bool keep_window_size { get; set; }
-        public bool use_custom_font { get; set; }
-        public string custom_font { get; set; }
         public double cell_height { get; set; }
         public double cell_width { get; set; }
-        public bool bold_is_bright { get; set; }
-        public bool easy_copy_paste { get; set; }
     
         // Appearance
         public string system_color { get; set; }
@@ -17,12 +12,17 @@ namespace StillTerminal {
         public bool use_tab_color { get; set; }
         public int padding { get; set; }
         public int opacity { get; set; }
+        public bool keep_window_size { get; set; }
+        public bool use_custom_font { get; set; }
+        public string custom_font { get; set; }
+        public bool bold_is_bright { get; set; }
     
         // Scroll
         public bool show_scrollbar { get; set; }
         public int scrollback_limit { get; set; }
     
         // Misc
+        public bool easy_copy_paste { get; set; }
         public bool notification_on_task { get; set; }
         public GLib.Settings settings = new GLib.Settings ("io.stillhq.terminal");
     
@@ -61,6 +61,11 @@ namespace StillTerminal {
             settings.bind ("padding", bin, "margin-end", SettingsBindFlags.DEFAULT);
             settings.bind ("padding", bin, "margin-top", SettingsBindFlags.DEFAULT);
             settings.bind ("padding", bin, "margin-bottom", SettingsBindFlags.DEFAULT);
+        }
+
+        public void bind_to_general (StPrefsGeneralPage general) {
+            settings.bind ("cell-height", general.cell_spacing_group.cell_height, "value", SettingsBindFlags.DEFAULT);
+            settings.bind ("cell-width", general.cell_spacing_group.cell_width, "value", SettingsBindFlags.DEFAULT);
         }
     }
 }

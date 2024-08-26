@@ -5,6 +5,7 @@ sources = files(
 
 subdir('StTerminal')
 subdir('StWidgets')
+subdir('StPreferences')
 
 dependencies = [
   dependency('glib-2.0'),
