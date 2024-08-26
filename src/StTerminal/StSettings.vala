@@ -3,6 +3,7 @@ namespace StillTerminal {
         // General Settings
         public int window_width { get; set; }
         public int window_height { get; set; }
+        public bool keep_window_size { get; set; }
         public double cell_height { get; set; }
         public double cell_width { get; set; }
     
@@ -12,7 +13,6 @@ namespace StillTerminal {
         public bool use_tab_color { get; set; }
         public int padding { get; set; }
         public int opacity { get; set; }
-        public bool keep_window_size { get; set; }
         public bool use_custom_font { get; set; }
         public string custom_font { get; set; }
         public bool bold_is_bright { get; set; }
@@ -66,7 +66,9 @@ namespace StillTerminal {
         public void bind_to_general (StPrefsGeneralPage general) {
             settings.bind ("window-width", general.window_group.window_width, "value", SettingsBindFlags.DEFAULT);
             settings.bind ("window-height", general.window_group.window_height, "value", SettingsBindFlags.DEFAULT);
-            settings.bind ("save-window-size", general.window_group.save_window_size, "active", SettingsBindFlags.DEFAULT);
+            settings.bind ("keep-window-size", general.window_group.save_window_size, "active", SettingsBindFlags.DEFAULT);
+            settings.bind ("keep-window-size", general.window_group.window_width, "sensitive", SettingsBindFlags.INVERT_BOOLEAN);
+            settings.bind ("keep-window-size", general.window_group.window_height, "sensitive", SettingsBindFlags.INVERT_BOOLEAN);
             settings.bind ("cell-height", general.cell_spacing_group.cell_height, "value", SettingsBindFlags.DEFAULT);
             settings.bind ("cell-width", general.cell_spacing_group.cell_width, "value", SettingsBindFlags.DEFAULT);
         }

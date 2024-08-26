@@ -21,16 +21,20 @@ namespace StillTerminal {
         public Adw.SwitchRow save_window_size;
 
         public StPrefsWindowGroup () {
-            this.set_title("Window Preferences");
+            this.set_title("Window Size");
             double max_width;
             double max_height;
             this.get_max_size (out max_width, out max_height);
 
-            this.window_width = new Adw.SpinRow.with_range (100, max_width, 0.05);
-            this.window_width.set_title ("Window Width");
+            this.window_width = new Adw.SpinRow.with_range (400, max_width, 5);
+            this.window_width.set_title ("Default Window Width");
+            this.window_width.set_subtitle("Default: 600");
+            this.window_width.set_digits(0);
 
-            this.window_height = new Adw.SpinRow.with_range (100, max_height, 0.05);
-            this.window_height.set_title ("Window Height");
+            this.window_height = new Adw.SpinRow.with_range (300, max_height, 5);
+            this.window_height.set_title ("Default Window Height");
+            this.window_height.set_subtitle("Default: 400");
+            this.window_height.set_digits(0);
 
             this.save_window_size = new Adw.SwitchRow ();
             this.save_window_size.set_title ("Save Window Size");

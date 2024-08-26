@@ -30,7 +30,7 @@ namespace StillTerminal {
 
             this.settings_button = new Gtk.Button.from_icon_name ("settings-symbolic");
             this.settings_button.clicked.connect (() => {
-                var dialog = new StPrefsDialog ();
+                var dialog = new StPrefsDialog (main_window);
                 dialog.present(this);
             });
             this.settings_button.valign = Gtk.Align.CENTER;

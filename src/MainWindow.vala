@@ -3,14 +3,14 @@
     public Adw.TabBar tab_bar;
     public Adw.TabView tab_view;
     public StillTerminal.StSettings settings;
+    public int call_times = 0;
 
     public MainWindow (Adw.Application app) {
         Object (application: app);
 
         this.settings = new StillTerminal.StSettings ();
-        this.default_height = 400;
-        this.default_width = 600;
-
+        this.default_height = this.settings.window_height;
+        this.default_width = this.settings.window_width;
         
         // Load the CSS file
         var css_provider = new Gtk.CssProvider ();
@@ -30,6 +30,7 @@
 
         this.add_tab (get_system_profile ());
         this.add_tab (get_system_profile ());
+        // this.connect ("allocate-size", this.window_resized);
 
         this.content = box;
     }
@@ -38,4 +39,14 @@
         var page = new StTerminalPage (this.settings, profile);
         Adw.TabPage tab_page = this.tab_view.add_page (page.scrolled_window, null);
     }
- }
+
+    public override void size_allocate (int width, int height, int baseline) {
+        print (this.call_times.to_string() + "\n");
+        this.call_times += 1;
+        if (this.settings.keep_window_size) {
+            this.settings.window_width = width;
+            this.settings.window_height = height;
+        }
+        base.size_allocate (width, height, baseline);
+    }
+}

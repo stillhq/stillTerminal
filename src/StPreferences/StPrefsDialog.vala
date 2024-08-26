@@ -2,10 +2,12 @@ namespace StillTerminal {
     public class StPrefsDialog {
         Adw.PreferencesDialog preferences_dialog;
     
-        public StPrefsDialog () {
+        public StPrefsDialog (MainWindow window) {
             this.preferences_dialog = new Adw.PreferencesDialog ();
 
-            this.preferences_dialog.add (new StPrefsGeneralPage ());
+            var general_page = new StPrefsGeneralPage ();
+            window.settings.bind_to_general(general_page);
+            this.preferences_dialog.add (general_page);
         }
 
         public void present (Gtk.Widget parent) {
