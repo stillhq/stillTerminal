@@ -15,6 +15,9 @@ dependencies = [
   dependency('libadwaita-1'),
   dependency('json-glib-1.0'),
   dependency('vte-2.91-gtk4', version: '>= 0.69.0'),
+
+  # This is a hack to get the math library linked in
+  meson.get_compiler('c').find_library('m', required : false)
 ]
 
 executable(

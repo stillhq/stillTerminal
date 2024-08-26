@@ -54,9 +54,9 @@ namespace StillTerminal {
             builder.begin_object();
 
             var hash_iter = hash.map_iterator();
-            hash.foreach((entry) => {
-                builder.set_member_name(entry.key);
-                builder.add_string_value(entry.value);
+            hash_iter.foreach((key, value) => {
+                builder.set_member_name(key);
+                builder.add_string_value(value);
                 return true;
             });
 

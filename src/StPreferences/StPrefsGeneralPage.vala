@@ -5,9 +5,13 @@ namespace StillTerminal {
         
         public StPrefsGeneralPage () {
             this.window_group = new StPrefsWindowGroup ();
+            this.cell_spacing_group = new StPrefsCellSpacingGroup ();
 
             this.set_title ("General");
             this.set_icon_name ("utilities-terminal-symbolic");
+
+            this.add (this.window_group);
+            this.add (this.cell_spacing_group);
         }
     }
 
@@ -17,16 +21,26 @@ namespace StillTerminal {
         public Adw.SwitchRow save_window_size;
 
         public StPrefsWindowGroup () {
-            this.set_title("Cell Spacing");
+            this.set_title("Window Preferences");
+            double max_width;
+            double max_height;
+            this.get_max_size (out max_width, out max_height);
 
-            this.window_width = new Adw.SpinRow.with_range (100, 2, 0.05);
-            this.window_width.set_title ("Terminal Cell Width");
+            this.window_width = new Adw.SpinRow.with_range (100, max_width, 0.05);
+            this.window_width.set_title ("Window Width");
 
-            this.window_height = new Adw.SpinRow.with_range (100, 2, 0.05);
-            this.window_height.set_title ("Terminal Cell Height");
+            this.window_height = new Adw.SpinRow.with_range (100, max_height, 0.05);
+            this.window_height.set_title ("Window Height");
+
+            this.save_window_size = new Adw.SwitchRow ();
+            this.save_window_size.set_title ("Save Window Size");
+
+            this.add (this.window_width);
+            this.add (this.window_height);
+            this.add (this.save_window_size);
         }
 
-        public void get_max_size (out int width, out int height) {
+        public void get_max_size (out double width, out double height) {
             var display = Gdk.Display.get_default ();
             var monitors = display.get_monitors ();
             var n_monitors = monitors.get_n_items();
@@ -35,11 +49,11 @@ namespace StillTerminal {
             height = 0;
 
             while (monitor_index < n_monitors) {
-                var monitor = monitors.get_item (monitor_index);
+                var monitor = monitors.get_item (monitor_index) as Gdk.Monitor;
                 if (monitor != null) {
-                    var geometry = monitor.get_geometry ();
-                    var monitor_width = geometry.get_width ();
-                    var monitor_height = geometry.get_height ();
+                    var rect = monitor.get_geometry ();
+                    var monitor_width = rect.width;
+                    var monitor_height = rect.height;
                     width = Math.fmax (monitor_width, width);
                     height = Math.fmax (monitor_height, height);
                 }
@@ -60,6 +74,9 @@ namespace StillTerminal {
 
             this.cell_height = new Adw.SpinRow.with_range (1, 2, 0.05);
             this.cell_height.set_title ("Terminal Cell Height");
+
+            this.add (this.cell_width);
+            this.add (this.cell_height);
         }
     }
 }

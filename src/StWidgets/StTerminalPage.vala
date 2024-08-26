@@ -1,7 +1,7 @@
 namespace StillTerminal {
 
     public class StTerminalPage : GLib.Object {
-        Adw.TabPage tab_page;
+        //  Adw.TabPage tab_page;
         public StTerminal terminal;
         public Gtk.ScrolledWindow scrolled_window;
 

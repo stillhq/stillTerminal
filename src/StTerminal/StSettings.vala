@@ -64,6 +64,9 @@ namespace StillTerminal {
         }
 
         public void bind_to_general (StPrefsGeneralPage general) {
+            settings.bind ("window-width", general.window_group.window_width, "value", SettingsBindFlags.DEFAULT);
+            settings.bind ("window-height", general.window_group.window_height, "value", SettingsBindFlags.DEFAULT);
+            settings.bind ("save-window-size", general.window_group.save_window_size, "active", SettingsBindFlags.DEFAULT);
             settings.bind ("cell-height", general.cell_spacing_group.cell_height, "value", SettingsBindFlags.DEFAULT);
             settings.bind ("cell-width", general.cell_spacing_group.cell_width, "value", SettingsBindFlags.DEFAULT);
         }

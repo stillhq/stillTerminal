@@ -1,4 +1,4 @@
 sources += files(
-  'StPrefsWindow.vala',
-    'StPrefsGeneralPage.vala',
+  'StPrefsDialog.vala',
+  'StPrefsGeneralPage.vala'
 )

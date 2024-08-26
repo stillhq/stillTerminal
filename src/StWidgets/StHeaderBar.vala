@@ -12,8 +12,7 @@ namespace StillTerminal {
 
             this.header_bar = new Gtk.HeaderBar ();
             this.tab_bar = new Adw.TabBar ();
-            //this.header_bar.set_centering_policy(Adw.CenteringPolicy.LOOSE);
-            //this.header_bar.set_show_title(false);
+
             this.tab_bar.set_hexpand (true);
             this.tab_bar.set_halign (Gtk.Align.FILL);
             this.tab_bar.set_view(main_window.tab_view);
@@ -31,7 +30,8 @@ namespace StillTerminal {
 
             this.settings_button = new Gtk.Button.from_icon_name ("settings-symbolic");
             this.settings_button.clicked.connect (() => {
-                main_window.add_tab (get_system_profile ());
+                var dialog = new StPrefsDialog ();
+                dialog.present(this);
             });
             this.settings_button.valign = Gtk.Align.CENTER;
             this.settings_button.halign = Gtk.Align.CENTER;
