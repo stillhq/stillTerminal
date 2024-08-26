@@ -10,20 +10,3 @@ window:not(.about) headerbar,
     background-color: @window_bg_color;
 }
 
-.custom-headerbar windowcontrols:not(.empty).start {
-    margin-right: 6px;
-}
-
-.custom-headerbar windowcontrols.start.empty ~ tabbar {
-    margin-left: -6px;
-}
-
-.custom-headerbar windowcontrols:not(.empty).end {
-    margin-left: 6px;
-}
-  
-.custom-headerbar.with-dragarea:not(.single-tab-mode)
-    windowcontrols.start.empty
-    ~ tabbar {
-    margin-left: 34px;
-}
