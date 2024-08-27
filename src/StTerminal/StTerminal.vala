@@ -75,8 +75,8 @@ namespace StillTerminal {
             var color_scheme = StColorScheme.new_from_id(color_scheme_name);
 
             if (color_scheme == null) {
-                // Switch to system color scheme if the selected one is not found
-                color_scheme = StColorScheme.new_from_id("system");
+                // Switch to default color scheme if the selected one is not found
+                color_scheme = StColorScheme.new_from_id("Adwaita");
             }
 
             // Set color scheme

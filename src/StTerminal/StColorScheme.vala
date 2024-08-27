@@ -404,7 +404,8 @@ namespace StillTerminal {
 
         // THIS IS FOR TESTING PURPOSES
         // TODO: Remove this
-        available_schemes["adwaita"] = "/home/cameronknauff/Documents/stillTerminal/data/schemes/default.json";
+        available_schemes["Adwaita"] = "/home/cameronknauff/Documents/stillTerminal/data/schemes/Adwaita.json";
+        available_schemes["Fedora"] = "/home/cameronknauff/Documents/stillTerminal/data/schemes/Fedora.json";
         
         string[] dirs = get_scheme_dirs();
         try {

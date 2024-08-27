@@ -23,7 +23,7 @@
 
         this.tab_view = new Adw.TabView ();
 
-        var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 10);
+        var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
         box.append (new StHeaderBar (this));
         box.append (tab_view);
 
@@ -34,9 +34,11 @@
         this.content = box;
     }
 
-    public void add_tab (StProfile profile) {
+    public Adw.TabPage add_tab (StProfile profile) {
         var page = new StTerminalPage (this.settings, profile);
         Adw.TabPage tab_page = this.tab_view.add_page (page.scrolled_window, null);
+        
+        return tab_page;
     }
 
     public override void size_allocate (int width, int height, int baseline) {

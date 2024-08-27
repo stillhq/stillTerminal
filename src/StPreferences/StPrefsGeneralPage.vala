@@ -2,16 +2,19 @@ namespace StillTerminal {
     public class StPrefsGeneralPage : Adw.PreferencesPage {
         public StPrefsWindowGroup window_group;
         public StPrefsCellSpacingGroup cell_spacing_group;
+        public StPrefsAppearanceGroup appearance_group;
         
         public StPrefsGeneralPage () {
             this.window_group = new StPrefsWindowGroup ();
             this.cell_spacing_group = new StPrefsCellSpacingGroup ();
+            this.appearance_group = new StPrefsAppearanceGroup ();
 
             this.set_title ("General");
             this.set_icon_name ("utilities-terminal-symbolic");
 
             this.add (this.window_group);
             this.add (this.cell_spacing_group);
+            this.add (this.appearance_group);
         }
     }
 
@@ -89,19 +92,28 @@ namespace StillTerminal {
         public Adw.SwitchRow use_profile_color;
         public Adw.SwitchRow use_tab_color;
         public Adw.SpinRow padding;
-        public Adw.SpinRow opacity;
+        public Adw.SpinRow opacity_setting; // different name to avoid conflict with opacity property
         public Adw.SwitchRow use_custom_font;
         public Adw.ActionRow custom_font;
         public Adw.SwitchRow bold_is_bright;
 
         public StPrefsAppearanceGroup () {
-            this.set_title("Appearance");
+            this.set_title ("Appearance");
 
             this.system_color = new Adw.ComboRow ();
             this.system_color.set_title ("System Color Scheme");
+            string[] available_strings = {};
+            var available_schemes = get_available_schemes ();
+            foreach (var scheme in available_schemes.keys) {
+                available_strings += scheme;
+            }
+
+            this.system_color.set_model(
+                new Gtk.StringList(available_strings)
+            );
 
             this.use_profile_color = new Adw.SwitchRow ();
-            this.use_profile_color.set_title ("Use Profile Color Scheme");
+            this.use_profile_color.set_title ("Use Profile Specific Color Scheme");
 
             this.use_tab_color = new Adw.SwitchRow ();
             this.use_tab_color.set_title ("Use Tab Color Scheme");
@@ -109,8 +121,8 @@ namespace StillTerminal {
             this.padding = new Adw.SpinRow.with_range (0, 10, 1);
             this.padding.set_title ("Padding");
 
-            this.opacity = new Adw.SpinRow.with_range (0, 100, 1);
-            this.opacity.set_title ("Opacity");
+            this.opacity_setting = new Adw.SpinRow.with_range (0, 100, 1);
+            this.opacity_setting.set_title ("Opacity");
 
             this.use_custom_font = new Adw.SwitchRow ();
             this.use_custom_font.set_title ("Use Custom Font");
@@ -125,7 +137,7 @@ namespace StillTerminal {
             this.add (this.use_profile_color);
             this.add (this.use_tab_color);
             this.add (this.padding);
-            this.add (this.opacity);
+            this.add (this.opacity_setting);
             this.add (this.use_custom_font);
             this.add (this.custom_font);
             this.add (this.bold_is_bright);
