@@ -35,7 +35,7 @@ namespace StillTerminal {
                 obj.get_string_member("working_directory"),
                 obj.get_string_member("spawn_command"),
                 obj.get_string_member("distrobox_id")
-            );
+            ); 
         }
 
         public Gee.HashMap<string, string> as_hash() {

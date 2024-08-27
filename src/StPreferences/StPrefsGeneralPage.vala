@@ -83,4 +83,52 @@ namespace StillTerminal {
             this.add (this.cell_height);
         }
     }
+
+    public class StPrefsAppearanceGroup : Adw.PreferencesGroup {
+        public Adw.ComboRow system_color;
+        public Adw.SwitchRow use_profile_color;
+        public Adw.SwitchRow use_tab_color;
+        public Adw.SpinRow padding;
+        public Adw.SpinRow opacity;
+        public Adw.SwitchRow use_custom_font;
+        public Adw.ActionRow custom_font;
+        public Adw.SwitchRow bold_is_bright;
+
+        public StPrefsAppearanceGroup () {
+            this.set_title("Appearance");
+
+            this.system_color = new Adw.ComboRow ();
+            this.system_color.set_title ("System Color Scheme");
+
+            this.use_profile_color = new Adw.SwitchRow ();
+            this.use_profile_color.set_title ("Use Profile Color Scheme");
+
+            this.use_tab_color = new Adw.SwitchRow ();
+            this.use_tab_color.set_title ("Use Tab Color Scheme");
+
+            this.padding = new Adw.SpinRow.with_range (0, 10, 1);
+            this.padding.set_title ("Padding");
+
+            this.opacity = new Adw.SpinRow.with_range (0, 100, 1);
+            this.opacity.set_title ("Opacity");
+
+            this.use_custom_font = new Adw.SwitchRow ();
+            this.use_custom_font.set_title ("Use Custom Font");
+
+            this.custom_font = new Adw.ActionRow ();
+            this.custom_font.set_title ("Custom Font");
+
+            this.bold_is_bright = new Adw.SwitchRow ();
+            this.bold_is_bright.set_title ("Bold is Bright");
+
+            this.add (this.system_color);
+            this.add (this.use_profile_color);
+            this.add (this.use_tab_color);
+            this.add (this.padding);
+            this.add (this.opacity);
+            this.add (this.use_custom_font);
+            this.add (this.custom_font);
+            this.add (this.bold_is_bright);
+        }
+    }
 }

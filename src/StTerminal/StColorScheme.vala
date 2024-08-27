@@ -291,6 +291,27 @@ namespace StillTerminal {
             return palette;
         }
 
+        public Gdk.RGBA[] get_light_rgba_palette() {
+            Gdk.RGBA[] palette = new Gdk.RGBA[16];
+            palette[0].parse (this.light_black);
+            palette[1].parse (this.light_red);
+            palette[2].parse (this.light_green);
+            palette[3].parse (this.light_yellow);
+            palette[4].parse (this.light_blue);
+            palette[5].parse (this.light_magenta);
+            palette[6].parse (this.light_cyan);
+            palette[7].parse (this.light_white);
+            palette[8].parse (this.light_bright_black);
+            palette[9].parse (this.light_bright_red);
+            palette[10].parse (this.light_bright_green);
+            palette[11].parse (this.light_bright_yellow);
+            palette[12].parse (this.light_bright_blue);
+            palette[13].parse (this.light_bright_magenta);
+            palette[14].parse (this.light_bright_cyan);
+            palette[15].parse (this.light_bright_white);
+            return palette;
+        }
+
         public static StColorScheme? new_from_json(string filename) {
             // Each json will have a light and dark hash with the colors
             

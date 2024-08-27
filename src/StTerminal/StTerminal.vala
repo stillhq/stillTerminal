@@ -66,26 +66,47 @@ namespace StillTerminal {
         }
 
         public void set_appearance (string color_scheme_name) {
-            if (color_scheme_name == "system") {
+            var style_manager = Adw.StyleManager.get_default ();
+            bool is_dark = style_manager.dark;
+            
+            if (color_scheme_name == "system" || !(this.settings.use_profile_color)) {
                 color_scheme_name = this.settings.system_color;
             }
-            this.color_scheme = StColorScheme.new_from_id(color_scheme_name);
+            var color_scheme = StColorScheme.new_from_id(color_scheme_name);
+
+            if (color_scheme == null) {
+                // Switch to system color scheme if the selected one is not found
+                color_scheme = StColorScheme.new_from_id("system");
+            }
 
             // Set color scheme
             Gdk.RGBA bold_color = Gdk.RGBA ();
-            bold_color.parse ( color_scheme.dark_bold_color );
-            this.vte.set_color_cursor ( bold_color );
-
             Gdk.RGBA cursor_color = Gdk.RGBA ();
-            cursor_color.parse ( color_scheme.dark_cursor_color );
-            this.vte.set_color_cursor ( cursor_color );
-
             Gdk.RGBA background_color = Gdk.RGBA ();
-            background_color.parse ( color_scheme.dark_background_color );
             Gdk.RGBA foreground_color = Gdk.RGBA ();
-            foreground_color.parse ( color_scheme.dark_foreground_color );
+            Gdk.RGBA[] palette;
+
+            if (is_dark) {
+                bold_color.parse ( color_scheme.dark_bold_color );
+                cursor_color.parse ( color_scheme.dark_cursor_color );
+                background_color.parse ( color_scheme.dark_background_color );
+                foreground_color.parse ( color_scheme.dark_foreground_color );
+                palette = color_scheme.get_dark_rgba_palette ();
+            } else {
+                bold_color.parse ( color_scheme.light_bold_color );
+                cursor_color.parse ( color_scheme.light_cursor_color );
+                background_color.parse ( color_scheme.light_background_color );
+                foreground_color.parse ( color_scheme.light_foreground_color );
+                palette = color_scheme.get_light_rgba_palette ();
+            }
+
+            // WTF IS THIS NOT WORKING!?
+            background_color.alpha = (float) this.settings.opacity * 0.01f;
+
+            this.vte.set_color_cursor ( bold_color );
+            this.vte.set_color_cursor ( cursor_color );
             this.vte.set_colors (
-                foreground_color, background_color, color_scheme.get_dark_rgba_palette ()
+                foreground_color, background_color, palette
             );
 
             // Set font
