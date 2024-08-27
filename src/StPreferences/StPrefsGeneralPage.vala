@@ -89,6 +89,7 @@ namespace StillTerminal {
 
     public class StPrefsAppearanceGroup : Adw.PreferencesGroup {
         public Adw.ComboRow system_color;
+        private string[] available_scheme_strings = {};
         public Adw.SwitchRow use_profile_color;
         public Adw.SwitchRow use_tab_color;
         public Adw.SpinRow padding;
@@ -102,14 +103,13 @@ namespace StillTerminal {
 
             this.system_color = new Adw.ComboRow ();
             this.system_color.set_title ("System Color Scheme");
-            string[] available_strings = {};
             var available_schemes = get_available_schemes ();
             foreach (var scheme in available_schemes.keys) {
-                available_strings += scheme;
+                this.available_scheme_strings += scheme;
             }
 
             this.system_color.set_model(
-                new Gtk.StringList(available_strings)
+                new Gtk.StringList(available_scheme_strings)
             );
 
             this.use_profile_color = new Adw.SwitchRow ();
@@ -141,6 +141,32 @@ namespace StillTerminal {
             this.add (this.use_custom_font);
             this.add (this.custom_font);
             this.add (this.bold_is_bright);
+        }
+
+        public void scheme_dropdown_changed (Adw.ComboRow combo, GLib.ParamSpec _selected, Settings settings) {
+            string selected_scheme = available_scheme_strings[combo.get_selected ()];
+            if (settings.get_string("system-color") == selected_scheme) {
+                return;
+            }
+
+            settings.set_string("system-color", selected_scheme);
+        }
+
+        public void scheme_setting_changed (GLib.Settings settings, string key) {
+            if (key != "system-color") {
+                return;
+            }
+
+            var scheme = settings.get_string (key);
+            if (scheme == this.available_scheme_strings[this.system_color.get_selected()]) {
+                return;
+            }
+            for (int i = 0; i < this.available_scheme_strings.length; i++) {
+                if (this.available_scheme_strings[i] == scheme) {
+                    this.system_color.set_selected (i);
+                    return;
+                }
+            }
         }
     }
 }

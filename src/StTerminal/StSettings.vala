@@ -24,9 +24,10 @@ namespace StillTerminal {
         // Misc
         public bool easy_copy_paste { get; set; }
         public bool notification_on_task { get; set; }
-        public GLib.Settings settings = new GLib.Settings ("io.stillhq.terminal");
+        public GLib.Settings settings;
     
         public StSettings () {
+            settings = new GLib.Settings ("org.gnome.Terminal");
             settings.bind ("window-width", this, "window_width", SettingsBindFlags.DEFAULT);
             settings.bind ("window-height", this, "window_height", SettingsBindFlags.DEFAULT);
             settings.bind ("keep-window-size", this, "keep_window_size", SettingsBindFlags.DEFAULT);
@@ -45,7 +46,7 @@ namespace StillTerminal {
             settings.bind ("scrollback-limit", this, "scrollback_limit", SettingsBindFlags.DEFAULT);
             settings.bind ("notification-on-task", this, "notification_on_task", SettingsBindFlags.DEFAULT);
         }
-    
+  
         public void bind_to_vte (Adw.Bin bin, Vte.Terminal vte) {
             settings.bind ("cell-height", vte, "cell_height_scale", SettingsBindFlags.DEFAULT);
             settings.bind ("cell-width", vte, "cell_width_scale", SettingsBindFlags.DEFAULT);
@@ -66,6 +67,19 @@ namespace StillTerminal {
             settings.bind ("keep-window-size", general.window_group.window_height, "sensitive", SettingsBindFlags.INVERT_BOOLEAN);
             settings.bind ("cell-height", general.cell_spacing_group.cell_height, "value", SettingsBindFlags.DEFAULT);
             settings.bind ("cell-width", general.cell_spacing_group.cell_width, "value", SettingsBindFlags.DEFAULT);
+            settings.bind ("use-profile-color", general.appearance_group.use_profile_color, "active", SettingsBindFlags.DEFAULT);
+            settings.bind ("use-tab-color", general.appearance_group.use_tab_color, "active", SettingsBindFlags.DEFAULT);
+            settings.bind ("padding", general.appearance_group.padding, "value", SettingsBindFlags.DEFAULT);
+            settings.bind ("opacity", general.appearance_group.opacity_setting, "value", SettingsBindFlags.DEFAULT);
+            settings.bind ("use-custom-font", general.appearance_group.use_custom_font, "active", SettingsBindFlags.DEFAULT);
+            //settings.bind ("custom-font", general.appearance_group.custom_font, "value", SettingsBindFlags.DEFAULT);
+            settings.bind ("bold-is-bright", general.appearance_group.bold_is_bright, "active", SettingsBindFlags.DEFAULT);
+
+            // Connecting dropdown to system color
+            settings.connect("changed::system-color", general.appearance_group.scheme_setting_changed);
+            general.appearance_group.system_color.connect("notify::selected",
+                general.appearance_group.scheme_dropdown_changed, settings
+            );
         }
     }
 }
