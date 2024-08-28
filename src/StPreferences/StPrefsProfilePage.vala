@@ -7,11 +7,15 @@ namespace StillTerminal {
             this.set_title ("Profiles");
             this.set_icon_name ("utilities-terminal-symbolic");
 
-            foreach (StProfile profile in profile_index) {
-                print(profile.id);
-            }
-
             var profiles_group = new Adw.PreferencesGroup ();
+            var profile_button = new Gtk.Button ();
+            profile_button.set_label ("New Profile");
+            profile_button.clicked.connect (() => {
+                var dialog = new StPrefsProfileCreator ();
+                dialog.present(this);
+            });
+            profiles_group.set_header_suffix (profile_button);
+
             foreach (StProfile profile in profile_index) {
                 print(profile.id);
                 var row = new Adw.ActionRow();
