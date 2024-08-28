@@ -1,4 +1,30 @@
 namespace StillTerminal {
+    public enum StProfileType {
+        SYSTEM, DISTROBOX, SSH;
+
+        public string to_string() {
+            switch (this) {
+                case SYSTEM:
+                    return "system";
+                case DISTROBOX:
+                    return "distrobox";
+                case SSH:
+                    return "ssh";
+            }
+        }
+
+        public static StProfileType from_string(string type) {
+            switch (type) {
+                case "system":
+                    return SYSTEM;
+                case "distrobox":
+                    return DISTROBOX;
+                case "ssh":
+                    return SSH;
+            }
+        }
+    }
+
     public class StProfile {
         public string id;
         public string name;
@@ -7,75 +33,108 @@ namespace StillTerminal {
         public string? spawn_command;
         public string? profile_file;
         public string? icon_name;
-        public string? distrobox_id;
-
+        public StProfileType type;
+        public string[]? type_data;
+        public string? subtitle;
+    
         public StProfile (
             string id, string name, string color_scheme, string working_directory,
-            string? distrobox_id = null, string profile_file_path,
-            string? icon_name, string? subtitle, string? spawn_command = null
+            string? spawn_command = null, string? profile_file = null,
+            string? icon_name = null, StProfileType type = StProfileType.SYSTEM,
+            string[]? type_data = null, string? subtitle = null
         ) {
             this.id = id;
             this.name = name;
             this.color_scheme = color_scheme;
             this.working_directory = working_directory;
             this.spawn_command = spawn_command;
-            this.distrobox_id = distrobox_id;
+            this.profile_file = profile_file;
             this.icon_name = icon_name;
-            this.profile_file = null;
-            this.subtitle = null;
+            this.type = type;
+            this.type_data = type_data;
+            this.subtitle = subtitle;
         }
-
-        public StProfile? new_from_json(string filename) {
+    
+        public static StProfile? new_from_json(string filename) {
             Json.Parser parser = new Json.Parser();
             try {
                 parser.load_from_file (filename);
             } catch (GLib.Error e) {
                 return null;
             }
-
+    
             Json.Object obj = parser.get_root().get_object();
+            
+            StProfileType profile_type = StProfileType.SYSTEM;
+            if (obj.has_member("type")) {
+                profile_type = StProfileType.from_string(obj.get_string_member("type"));
+            }
+    
+            string[]? type_data = null;
+            if (obj.has_member("type_data")) {
+                var type_data_array = obj.get_array_member("type_data");
+                type_data = new string[type_data_array.get_length()];
+                for (int i = 0; i < type_data_array.get_length(); i++) {
+                    type_data[i] = type_data_array.get_string_element(i);
+                }
+            }
+    
             return new StProfile(
                 obj.get_string_member("id"),
                 obj.get_string_member("name"),
                 obj.get_string_member("color-scheme"),
                 obj.get_string_member("working_directory"),
-                obj.get_string_member("distrobox_id"),
-                filename,
                 obj.get_string_member("spawn_command"),
-            ); 
+                filename,
+                obj.get_string_member("icon-name"),
+                profile_type,
+                type_data,
+                obj.get_string_member("subtitle")
+            );
         }
-
+    
         public Gee.HashMap<string, string> as_hash() {
-            Gee.HashMap<string, string> hash = new Gee.HashMap<string, string> ();
+            var hash = new Gee.HashMap<string, string>();
             hash["id"] = this.id;
             hash["name"] = this.name;
+            hash["color_scheme"] = this.color_scheme;
             hash["working_directory"] = this.working_directory;
-            hash["spawn_command"] = this.spawn_command;
-            hash["distrobox_id"] = this.distrobox_id;
+            if (this.spawn_command != null) hash["spawn_command"] = this.spawn_command;
+            if (this.profile_file != null) hash["profile_file"] = this.profile_file;
+            if (this.icon_name != null) hash["icon_name"] = this.icon_name;
+            hash["type"] = this.type.to_string();
+            if (this.type_data != null) hash["type_data"] = string.joinv(",", this.type_data);
+            if (this.subtitle != null) hash["subtitle"] = this.subtitle;
             return hash;
         }
-
+    
         public void save_to_json(string filename) {
             var hash = this.as_hash();
             var builder = new Json.Builder();
             builder.begin_object();
-
-            var hash_iter = hash.map_iterator();
-            hash_iter.foreach((key, value) => {
-                builder.set_member_name(key);
-                builder.add_string_value(value);
-                return true;
-            });
-
+    
+            foreach (var entry in hash.entries) {
+                builder.set_member_name(entry.key);
+                if (entry.key == "type_data" && this.type_data != null) {
+                    builder.begin_array();
+                    foreach (string data in this.type_data) {
+                        builder.add_string_value(data);
+                    }
+                    builder.end_array();
+                } else {
+                    builder.add_string_value(entry.value);
+                }
+            }
+    
             builder.end_object();
-
+    
             var generator = new Json.Generator();
             generator.set_root(builder.get_root());
-
+    
             try {
                 generator.to_file(filename);
             } catch (GLib.Error e) {
-                print("Error saving profile to file: %s\n".printf(e.message));
+                print("Error saving profile to file: %s\n", e.message);
             }
         }
     }
@@ -85,7 +144,13 @@ namespace StillTerminal {
             "system",
             "System",
             "system",
-            GLib.Environment.get_home_dir()
+            GLib.Environment.get_home_dir(),
+            null,
+            null,
+            null,
+            StProfileType.SYSTEM,
+            null,
+            "stillOS"
         );
     }
 
@@ -96,7 +161,7 @@ namespace StillTerminal {
         );
 
         // Create the directory if it doesn't exist
-        if (file.query_exists()) {
+        if (!(file.query_exists())) {
             try {
                 file.make_directory_with_parents();
             } catch (GLib.Error e) {
@@ -107,27 +172,32 @@ namespace StillTerminal {
         return file.get_path ();
     }
 
-    public St.Profile[] get_profiles() {
+    public StProfile[] get_profiles() {
         var profile_dir = get_local_profile_dir();
-        St.Profile[] profiles = {};
+        StProfile[] profiles = {};
 
         var dir = File.new_for_path(profile_dir);
-        var enumerator = dir.enumerate_children(
-            "standard::name,standard::type",
-            FileQueryInfoFlags.NONE,
-            null
-        );
+        try {
+            var enumerator = dir.enumerate_children(
+                "standard::name,standard::type",
+                FileQueryInfoFlags.NONE,
+                null
+            );
 
-        FileInfo? info;
-        while ((info = enumerator.next_file()) != null) {
-            if (info.get_file_type() != FileType.REGULAR) {
-                continue;
+            FileInfo? info;
+            while ((info = enumerator.next_file()) != null) {
+                if (info.get_file_type() != FileType.REGULAR) {
+                    continue;
+                }
+    
+                var profile = StProfile.new_from_json(info.get_name());
+                if (profile != null) {
+                    profiles += profile;
+                }
             }
-
-            var profile = St.Profile.new_from_json(info.get_name());
-            if (profile != null) {
-                profiles += profile;
-            }
+        } catch (GLib.Error e) {
+            print("Error enumerating profile directory: %s\n".printf (e.message));
+            return profiles;
         }
 
         return profiles;

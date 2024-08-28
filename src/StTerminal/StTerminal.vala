@@ -39,30 +39,42 @@ namespace StillTerminal {
         }
 
         public string[] get_spawn_list (StProfile profile) {
-            if (profile.spawn_command == null) {
-                return new string[] {GLib.Environment.get_variable ("SHELL")};
-            }
-            string[] args = profile.spawn_command.split(" ");
-            if (args.length == 0) {
-                return new string[] {GLib.Environment.get_variable ("SHELL")};
-            }
-            if (profile.distrobox_id != null) {
-                string[] distrobox_cmd = {"/bin/distrobox", "enter", "-n", profile.distrobox_id, "--"};
-                foreach (string arg in args) {
-                    distrobox_cmd += arg;
-                }
-                return args;
-            }
+            string[] type_data = profile.type_data;
+            
+            string[] spawn_args = profile.spawn_command.split(" ");
+            switch (profile.type) {
+                default:
+                    if (profile.spawn_command == null) {
+                        return new string[] {GLib.Environment.get_variable ("SHELL")};
+                    }
+                    if (spawn_args.length == 0) {
+                        return new string[] {GLib.Environment.get_variable ("SHELL")};
+                    }
+        
+                    GLib.File file = GLib.File.new_for_path (spawn_args[0]);
+                    if (file.query_exists ()) {
+                        return spawn_args;
+                    }
+                    string[] shell_cmd = {GLib.Environment.get_variable ("SHELL"), "-c"};
+                    foreach (string arg in spawn_args) {
+                        shell_cmd += arg;
+                    }
+                    return shell_cmd;
 
-            GLib.File file = GLib.File.new_for_path (args[0]);
-            if (file.query_exists ()) {
-                return args;
-            }
-            string[] shell_cmd = {GLib.Environment.get_variable ("SHELL"), "-c"};
-            foreach (string arg in args) {
-                shell_cmd += arg;
-            }
-            return shell_cmd;
+                case StProfileType.DISTROBOX:
+                    string[] distrobox_cmd = {"/bin/distrobox", "enter", "-n", type_data[0]};
+                    foreach (string arg in type_data[1:type_data.length]) {
+                        distrobox_cmd += arg;
+                    }
+                    distrobox_cmd += "--";
+                    foreach (string arg in spawn_args) {
+                        distrobox_cmd += arg;
+                    }
+                    return distrobox_cmd;
+
+                case StProfileType.SSH:
+                    print("Not implemented");
+            } 
         }
 
         public void set_appearance (string color_scheme_name) {
