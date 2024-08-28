@@ -5,11 +5,14 @@ namespace StillTerminal {
         public string color_scheme;
         public string working_directory;
         public string? spawn_command;
+        public string? profile_file;
+        public string? icon_name;
         public string? distrobox_id;
 
         public StProfile (
             string id, string name, string color_scheme, string working_directory,
-            string? distrobox_id = null, string? spawn_command = null
+            string? distrobox_id = null, string profile_file_path,
+            string? icon_name, string? subtitle, string? spawn_command = null
         ) {
             this.id = id;
             this.name = name;
@@ -17,6 +20,9 @@ namespace StillTerminal {
             this.working_directory = working_directory;
             this.spawn_command = spawn_command;
             this.distrobox_id = distrobox_id;
+            this.icon_name = icon_name;
+            this.profile_file = null;
+            this.subtitle = null;
         }
 
         public StProfile? new_from_json(string filename) {
@@ -33,8 +39,9 @@ namespace StillTerminal {
                 obj.get_string_member("name"),
                 obj.get_string_member("color-scheme"),
                 obj.get_string_member("working_directory"),
+                obj.get_string_member("distrobox_id"),
+                filename,
                 obj.get_string_member("spawn_command"),
-                obj.get_string_member("distrobox_id")
             ); 
         }
 
@@ -119,10 +126,10 @@ namespace StillTerminal {
 
             var profile = St.Profile.new_from_json(info.get_name());
             if (profile != null) {
-                profiles.add(profile);
+                profiles += profile;
             }
         }
 
-        return profiles.to_array();
+        return profiles;
     }
 }
