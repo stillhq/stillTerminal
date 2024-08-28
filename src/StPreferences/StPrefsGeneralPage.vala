@@ -129,12 +129,15 @@ namespace StillTerminal {
 
             this.use_custom_font = new Adw.SwitchRow ();
             this.use_custom_font.set_title ("Use Custom Font");
-            this.font_button = new Gtk.FontDialogButton ();
-            this.font_dialog = new Gtk.FontDialog ();
-
 
             this.custom_font = new Adw.ActionRow ();
             this.custom_font.set_title ("Custom Font");
+            this.font_dialog = new Gtk.FontDialog ();
+            this.font_button = new Gtk.FontDialogButton (this.font_dialog);
+            this.font_button.add_css_class("flat");
+            this.font_button.valign = Gtk.Align.CENTER;
+            this.custom_font.add_suffix (this.font_button);
+            this.custom_font.set_activatable_widget (this.font_button);
 
             this.bold_is_bright = new Adw.SwitchRow ();
             this.bold_is_bright.set_title ("Bold is Bright");
@@ -150,7 +153,6 @@ namespace StillTerminal {
         }
 
         public void scheme_dropdown_changed (Settings settings) {
-            print("dropdown changed");
             string selected_scheme = available_scheme_strings[this.system_color.get_selected ()];
             if (settings.get_string("system-color") == selected_scheme) {
                 return;
@@ -174,6 +176,28 @@ namespace StillTerminal {
                     return;
                 }
             }
+        }
+
+        public void font_button_changed (Settings settings) {
+            print("font button changed");
+            string selected_font = this.font_button.get_font_desc ().to_string();
+            if (settings.get_string("custom-font") == selected_font) {
+                return;
+            }
+    
+            settings.set_string("custom-font", selected_font);
+        }
+    
+        public void font_setting_changed (GLib.Settings settings, string key) {
+            if (key != "custom-font") {
+                return;
+            }
+    
+            var font = settings.get_string(key);
+            if (font == this.font_button.get_font_desc ().to_string ()) {
+                return;
+            }
+            this.font_button.set_font_desc(Pango.FontDescription.from_string(font));
         }
     }
 }

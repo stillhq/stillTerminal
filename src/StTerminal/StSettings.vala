@@ -88,6 +88,21 @@ namespace StillTerminal {
                     general.appearance_group.scheme_setting_changed(this.settings, key);
                 }
             });
+
+            // Connecting the font button
+            general.appearance_group.font_button.set_font_desc(
+                Pango.FontDescription.from_string(this.custom_font)
+            );
+            general.appearance_group.font_button.notify["font-desc"].connect(
+                (_button) => {
+                    general.appearance_group.font_button_changed(this.settings);
+                }
+            );
+            settings.changed.connect((key) => {
+                if (key == "custom-font") {
+                    general.appearance_group.font_setting_changed(this.settings, key);
+                }
+            });
         }
     }
 }
