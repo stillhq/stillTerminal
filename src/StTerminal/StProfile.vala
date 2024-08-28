@@ -81,4 +81,48 @@ namespace StillTerminal {
             GLib.Environment.get_home_dir()
         );
     }
+
+    public string get_local_profile_dir() {
+        File file = File.new_build_filename(
+            GLib.Environment.get_home_dir(),
+            "/.local/share/stillTerminal/profiles"
+        );
+
+        // Create the directory if it doesn't exist
+        if (file.query_exists()) {
+            try {
+                file.make_directory_with_parents();
+            } catch (GLib.Error e) {
+                print("Error creating profile directory: %s\n".printf(e.message));
+            }
+        }
+
+        return file.get_path ();
+    }
+
+    public St.Profile[] get_profiles() {
+        var profile_dir = get_local_profile_dir();
+        St.Profile[] profiles = {};
+
+        var dir = File.new_for_path(profile_dir);
+        var enumerator = dir.enumerate_children(
+            "standard::name,standard::type",
+            FileQueryInfoFlags.NONE,
+            null
+        );
+
+        FileInfo? info;
+        while ((info = enumerator.next_file()) != null) {
+            if (info.get_file_type() != FileType.REGULAR) {
+                continue;
+            }
+
+            var profile = St.Profile.new_from_json(info.get_name());
+            if (profile != null) {
+                profiles.add(profile);
+            }
+        }
+
+        return profiles.to_array();
+    }
 }
