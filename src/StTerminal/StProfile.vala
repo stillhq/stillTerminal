@@ -62,6 +62,7 @@ namespace StillTerminal {
             try {
                 parser.load_from_file (filename);
             } catch (GLib.Error e) {
+                print("Error loading profile from file: %s\n".printf(e.message));
                 return null;
             }
     
@@ -84,14 +85,14 @@ namespace StillTerminal {
             return new StProfile(
                 obj.get_string_member("id"),
                 obj.get_string_member("name"),
-                obj.get_string_member("color-scheme"),
-                obj.get_string_member("working_directory"),
-                obj.get_string_member("spawn_command"),
+                obj.has_member("color-scheme") ? obj.get_string_member("color-scheme") : "system",
+                obj.has_member("working_directory") ? obj.get_string_member("working_directory") : "",
+                obj.has_member("spawn_command") ? obj.get_string_member("spawn_command") : "",
                 filename,
-                obj.get_string_member("icon-name"),
+                obj.has_member("icon-name") ? obj.get_string_member("icon-name") : "",
                 profile_type,
                 type_data,
-                obj.get_string_member("subtitle")
+                obj.has_member("subtitle") ? obj.get_string_member("subtitle") : ""
             );
         }
     
@@ -179,6 +180,13 @@ namespace StillTerminal {
         if (!(file.query_exists())) {
             try {
                 file.make_directory_with_parents();
+
+                // Create a default profile
+                var profile = get_fallback_profile();
+                profile.id = "default";
+                profile.name = "Default";
+                profile.subtitle = "stillOS";
+                profile.save_to_json(file.get_child("default.json").get_path());
             } catch (GLib.Error e) {
                 print("Error creating profile directory: %s\n".printf(e.message));
             }
@@ -205,7 +213,9 @@ namespace StillTerminal {
                     continue;
                 }
     
-                var profile = StProfile.new_from_json(info.get_name());
+                var profile = StProfile.new_from_json(
+                    GLib.Path.build_filename (profile_dir, info.get_name())
+                );
                 if (profile != null) {
                     profiles += profile;
                 }
@@ -215,6 +225,7 @@ namespace StillTerminal {
             return {get_fallback_profile ()};
         }
 
+        print(profiles.length.to_string());
         return profiles;
     }
 }

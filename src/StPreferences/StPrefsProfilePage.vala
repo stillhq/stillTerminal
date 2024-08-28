@@ -1,13 +1,19 @@
 namespace StillTerminal {
     public class StPrefsProfilePage : Adw.PreferencesPage {
-        private StProfile[] profile_index = get_profiles();
+        private StProfile[] profile_index;
 
         public StPrefsProfilePage () {
+            this.profile_index = get_profiles ();
             this.set_title ("Profiles");
             this.set_icon_name ("utilities-terminal-symbolic");
 
+            foreach (StProfile profile in profile_index) {
+                print(profile.id);
+            }
+
             var profiles_group = new Adw.PreferencesGroup ();
             foreach (StProfile profile in profile_index) {
+                print(profile.id);
                 var row = new Adw.ActionRow();
                 row.set_title(profile.name);
 
