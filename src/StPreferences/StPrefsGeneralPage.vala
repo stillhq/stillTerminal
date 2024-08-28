@@ -88,6 +88,7 @@ namespace StillTerminal {
     }
 
     public class StPrefsAppearanceGroup : Adw.PreferencesGroup {
+        public bool change_settings = false;
         public Adw.ComboRow system_color;
         private string[] available_scheme_strings = {};
         public Adw.SwitchRow use_profile_color;
@@ -97,6 +98,8 @@ namespace StillTerminal {
         public Adw.SwitchRow use_custom_font;
         public Adw.ActionRow custom_font;
         public Adw.SwitchRow bold_is_bright;
+        public Gtk.FontDialogButton font_button;
+        public Gtk.FontDialog font_dialog;
 
         public StPrefsAppearanceGroup () {
             this.set_title ("Appearance");
@@ -126,6 +129,9 @@ namespace StillTerminal {
 
             this.use_custom_font = new Adw.SwitchRow ();
             this.use_custom_font.set_title ("Use Custom Font");
+            this.font_button = new Gtk.FontDialogButton ();
+            this.font_dialog = new Gtk.FontDialog ();
+
 
             this.custom_font = new Adw.ActionRow ();
             this.custom_font.set_title ("Custom Font");
@@ -143,8 +149,9 @@ namespace StillTerminal {
             this.add (this.bold_is_bright);
         }
 
-        public void scheme_dropdown_changed (Adw.ComboRow combo, GLib.ParamSpec _selected, Settings settings) {
-            string selected_scheme = available_scheme_strings[combo.get_selected ()];
+        public void scheme_dropdown_changed (Settings settings) {
+            print("dropdown changed");
+            string selected_scheme = available_scheme_strings[this.system_color.get_selected ()];
             if (settings.get_string("system-color") == selected_scheme) {
                 return;
             }

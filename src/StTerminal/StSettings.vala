@@ -27,7 +27,7 @@ namespace StillTerminal {
         public GLib.Settings settings;
     
         public StSettings () {
-            settings = new GLib.Settings ("org.gnome.Terminal");
+            settings = new GLib.Settings ("io.stillhq.terminal");
             settings.bind ("window-width", this, "window_width", SettingsBindFlags.DEFAULT);
             settings.bind ("window-height", this, "window_height", SettingsBindFlags.DEFAULT);
             settings.bind ("keep-window-size", this, "keep_window_size", SettingsBindFlags.DEFAULT);
@@ -76,10 +76,18 @@ namespace StillTerminal {
             settings.bind ("bold-is-bright", general.appearance_group.bold_is_bright, "active", SettingsBindFlags.DEFAULT);
 
             // Connecting dropdown to system color
-            settings.connect("changed::system-color", general.appearance_group.scheme_setting_changed);
-            general.appearance_group.system_color.connect("notify::selected",
-                general.appearance_group.scheme_dropdown_changed, settings
+            general.appearance_group.scheme_setting_changed(this.settings, "system-color");
+
+            general.appearance_group.system_color.notify["selected"].connect(
+                (_combo, _spec) => {
+                    general.appearance_group.scheme_dropdown_changed(this.settings);
+                }
             );
+            settings.changed.connect((key) => {
+                if (key == "system-color") {
+                    general.appearance_group.scheme_setting_changed(this.settings, key);
+                }
+            });
         }
     }
 }
