@@ -11,10 +11,11 @@ namespace StillTerminal {
                 case SSH:
                     return "ssh";
             }
+            return "";
         }
 
-        public static StProfileType from_string(string type) {
-            switch (type) {
+        public static StProfileType? from_string(string type) {
+            switch (type.ascii_down()) {
                 case "system":
                     return SYSTEM;
                 case "distrobox":
@@ -22,6 +23,7 @@ namespace StillTerminal {
                 case "ssh":
                     return SSH;
             }
+            return null;
         }
     }
 
@@ -139,9 +141,9 @@ namespace StillTerminal {
         }
     }
 
-    public StProfile get_system_profile() {
+    public StProfile get_fallback_profile() {
         return new StProfile(
-            "system",
+            "system_fallback",
             "System",
             "system",
             GLib.Environment.get_home_dir(),
@@ -150,8 +152,21 @@ namespace StillTerminal {
             null,
             StProfileType.SYSTEM,
             null,
-            "stillOS"
+            "stillOS (Fallback Profile)"
         );
+    }
+
+    public StProfile get_default_profile() {
+        StProfile[] profiles = get_profiles ();
+        if (profiles.length == 0) {
+            return get_fallback_profile();
+        }
+        foreach (var profile in profiles) {
+            if (profile.id == "default") {
+                return profile;
+            }
+        }
+        return profiles[0];
     }
 
     public string get_local_profile_dir() {
@@ -197,7 +212,7 @@ namespace StillTerminal {
             }
         } catch (GLib.Error e) {
             print("Error enumerating profile directory: %s\n".printf (e.message));
-            return profiles;
+            return {get_fallback_profile ()};
         }
 
         return profiles;

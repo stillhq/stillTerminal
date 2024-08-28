@@ -5,7 +5,7 @@ namespace StillTerminal {
         public StSettings settings;
         public Pango.FontDescription default_font_desc;
 
-        public StTerminal (StSettings settings) {
+        public StTerminal (StSettings settings, StProfile profile) {
             Object ();
             this.settings = settings;
 
@@ -18,7 +18,7 @@ namespace StillTerminal {
             // Used if custom font is disabled
             this.default_font_desc = this.vte.get_font ().copy ();
 
-            this.spawn_profile (get_system_profile ());
+            this.spawn_profile (profile);
             this.settings.bind_to_vte (this, this.vte);
         }
 
@@ -73,8 +73,10 @@ namespace StillTerminal {
                     return distrobox_cmd;
 
                 case StProfileType.SSH:
-                    print("Not implemented");
+                    print ("Not implemented");
+                    break;
             } 
+            return new string[] {GLib.Environment.get_variable ("SHELL")};
         }
 
         public void set_appearance (string color_scheme_name) {
@@ -113,6 +115,7 @@ namespace StillTerminal {
             }
 
             // WTF IS THIS NOT WORKING!?
+            // Maybe change widget
             background_color.alpha = (float) this.settings.opacity * 0.01f;
 
             this.vte.set_color_cursor ( bold_color );

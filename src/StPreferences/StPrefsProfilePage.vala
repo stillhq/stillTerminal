@@ -22,7 +22,9 @@ namespace StillTerminal {
                 if (profile.subtitle != null) {
                     row.set_subtitle (profile.subtitle);
                 }
+                profiles_group.add (row);
             }
+            this.add (profiles_group);
         }
     }
 }

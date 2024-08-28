@@ -72,6 +72,7 @@ namespace StillTerminal {
             settings.bind ("padding", general.appearance_group.padding, "value", SettingsBindFlags.DEFAULT);
             settings.bind ("opacity", general.appearance_group.opacity_setting, "value", SettingsBindFlags.DEFAULT);
             settings.bind ("use-custom-font", general.appearance_group.use_custom_font, "active", SettingsBindFlags.DEFAULT);
+            settings.bind ("use-custom-font", general.appearance_group.custom_font, "sensitive", SettingsBindFlags.DEFAULT);
             //settings.bind ("custom-font", general.appearance_group.custom_font, "value", SettingsBindFlags.DEFAULT);
             settings.bind ("bold-is-bright", general.appearance_group.bold_is_bright, "active", SettingsBindFlags.DEFAULT);
 

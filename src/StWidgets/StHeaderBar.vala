@@ -6,12 +6,13 @@ namespace StillTerminal {
         Gtk.Button settings_button;
 
         public StHeaderBar (MainWindow main_window) {
-            this.add_css_class ("custom-headerbar");
-            this.header_bar.add_css_class ("flat");
-            this.tab_bar.add_css_class ("flat");
 
             this.header_bar = new Gtk.HeaderBar ();
             this.tab_bar = new Adw.TabBar ();
+
+            this.add_css_class ("custom-headerbar");
+            this.header_bar.add_css_class ("flat");
+            this.tab_bar.add_css_class ("flat");
 
             this.tab_bar.set_hexpand (true);
             this.tab_bar.set_halign (Gtk.Align.FILL);
@@ -21,7 +22,7 @@ namespace StillTerminal {
 
             this.new_tab_button = new Gtk.Button.from_icon_name ("list-add-symbolic");
             this.new_tab_button.clicked.connect (() => {
-                main_window.add_tab (get_system_profile ());
+                main_window.add_tab (get_fallback_profile ());
             });
             this.new_tab_button.valign = Gtk.Align.CENTER;
             this.new_tab_button.halign = Gtk.Align.CENTER;

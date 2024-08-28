@@ -1,5 +1,4 @@
  public class StillTerminal.MainWindow : Adw.ApplicationWindow {
-    // GLib.ListStore clocks_list_store;
     public Adw.TabBar tab_bar;
     public Adw.TabView tab_view;
     public StillTerminal.StSettings settings;
@@ -10,7 +9,7 @@
         this.settings = new StillTerminal.StSettings ();
         this.default_height = this.settings.window_height;
         this.default_width = this.settings.window_width;
-        
+
         // Load the CSS file
         var css_provider = new Gtk.CssProvider ();
         // TODO: Change this to be a gresource
@@ -27,8 +26,8 @@
         box.append (new StHeaderBar (this));
         box.append (tab_view);
 
-        this.add_tab (get_system_profile ());
-        this.add_tab (get_system_profile ());
+        this.add_tab (get_default_profile ());
+        this.add_tab (get_fallback_profile ());
         // this.connect ("allocate-size", this.window_resized);
 
         this.content = box;
@@ -37,7 +36,8 @@
     public Adw.TabPage add_tab (StProfile profile) {
         var page = new StTerminalPage (this.settings, profile);
         Adw.TabPage tab_page = this.tab_view.add_page (page.scrolled_window, null);
-        
+        tab_page.title = profile.name;
+
         return tab_page;
     }
 

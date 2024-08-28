@@ -127,6 +127,9 @@ namespace StillTerminal {
             this.opacity_setting = new Adw.SpinRow.with_range (0, 100, 1);
             this.opacity_setting.set_title ("Opacity");
 
+            this.bold_is_bright = new Adw.SwitchRow ();
+            this.bold_is_bright.set_title ("Bold is Bright");
+
             this.use_custom_font = new Adw.SwitchRow ();
             this.use_custom_font.set_title ("Use Custom Font");
 
@@ -139,17 +142,14 @@ namespace StillTerminal {
             this.custom_font.add_suffix (this.font_button);
             this.custom_font.set_activatable_widget (this.font_button);
 
-            this.bold_is_bright = new Adw.SwitchRow ();
-            this.bold_is_bright.set_title ("Bold is Bright");
-
             this.add (this.system_color);
             this.add (this.use_profile_color);
             this.add (this.use_tab_color);
             this.add (this.padding);
             this.add (this.opacity_setting);
+            this.add (this.bold_is_bright);
             this.add (this.use_custom_font);
             this.add (this.custom_font);
-            this.add (this.bold_is_bright);
         }
 
         public void scheme_dropdown_changed (Settings settings) {
