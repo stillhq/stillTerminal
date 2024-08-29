@@ -3,12 +3,30 @@ namespace StillTerminal {
     public enum CreationType {
         SYSTEM, PREMADE_DISTROBOX, SSH, CUSTOM_DISTROBOX;
     }
+    
+    // These are only used for creating profiles, not for the profiles themselves
+    public class StDistroBoxProfile {
+        public string image_name;
+        public bool use_sdbm; // Still DistroBox Manager
+    }
+    
+    // These are only used for creating profiles, not for the profiles themselves
+    public class StSshProfile {
+        public string url;
+        public string username;
+        public string password;
+        public string key_file;
+        public string port;
+    }
 
     public class StPrefsProfileCreator {
         Adw.PreferencesDialog new_profile_dialog;
+        StPrefsNamePage name_page;
 
         public StPrefsProfileCreator () {
             this.new_profile_dialog = new Adw.PreferencesDialog ();
+            this.name_page = new StPrefsNamePage ();
+            this.new_profile_dialog.push_subpage (this.name_page);
         }
 
         public void present (Gtk.Widget parent) {
@@ -16,7 +34,7 @@ namespace StillTerminal {
         }
     }
 
-    public class StPrefsNamePage : Adw.PreferencesPage {
+    public class StPrefsNamePage : Adw.NavigationPage {
         Adw.PreferencesGroup pref_group;
         Adw.EntryRow name_row;
         Adw.ExpanderRow type_revealer_row;
@@ -24,12 +42,21 @@ namespace StillTerminal {
         Adw.ActionRow easy_dev_environment_row;
         Adw.ActionRow ssh_row;
         Adw.ActionRow custom_distrobox_row;
-        string selected_option;
+        CreationType selected_option;
         Gtk.CheckButton? last_button;
     
         public StPrefsNamePage () {
+            this.can_pop = false;
+            this.title = "New Profile";
+            var header = new Adw.HeaderBar ();
+            var preferences_page = new Adw.PreferencesPage ();
+            var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+            box.append (header);
+            box.append (preferences_page);
+
             this.pref_group = new Adw.PreferencesGroup ();
-            this.add(this.pref_group);
+            preferences_page.add(this.pref_group);
+            this.set_child(box);
             
             this.name_row = new Adw.EntryRow();
             this.name_row.set_title("Profile Name");
@@ -84,7 +111,12 @@ namespace StillTerminal {
                 button.set_group(last_button);
             }
             row.add_suffix(button);
-            this.pref_group.add (row);
+            this.type_revealer_row.add_row (row);
+            button.toggled.connect((button) => {
+                if (button.active) {
+                    this.selected_option = type;
+                }
+            });
             return row;
         }
     }
