@@ -143,10 +143,24 @@ namespace StillTerminal {
             row.set_activatable_widget (button);
             return row;
         }
+
+        public void next_page () {
+            switch (this.selected_option) {
+                case CreationType.SYSTEM:
+                    break;
+                case CreationType.PREMADE_DISTROBOX:
+                    break;
+                case CreationType.SSH:
+                    break;
+                case CreationType.CUSTOM_DISTROBOX:
+                    break;
+            }
+        }
     }
 
     public class StProfileCreatorProfilePage : Adw.NavigationPage {
         StPrefsProfileCreator dialog;
+        string[] available_schemes;
         Adw.PreferencesGroup pref_group;
         Adw.EntryRow name_row;
         Adw.ComboRow color_scheme_row;
@@ -156,7 +170,8 @@ namespace StillTerminal {
         Adw.EntryRow icon_name_row;
         Adw.EntryRow subtitle_row;
 
-        public StProfileCreatorProfilePage () {
+        public StProfileCreatorProfilePage (StPrefsProfileCreator dialog) {
+            this.available_schemes = get_available_schemes ().keys.to_array ();
             this.dialog = dialog;
             this.title = "Profile Settings";
 
@@ -170,8 +185,47 @@ namespace StillTerminal {
             box.append (preferences_page);
 
             this.pref_group = new Adw.PreferencesGroup ();
-            preferences_page.add(this.pref_group);
-            this.set_child(box);
+            preferences_page.add (this.pref_group);
+            this.set_child (box);
+
+            this.name_row = new Adw.EntryRow ();
+            this.name_row.set_title ("Profile Name");
+            this.name_row.set_input_purpose (Gtk.InputPurpose.NAME);
+            this.pref_group.add (this.name_row);
+
+            this.color_scheme_row = new Adw.ComboRow ();
+            this.color_scheme_row.set_title ("Color Scheme");
+            this.color_scheme_row.set_subtitle ("Color scheme used for this profile");
+            this.color_scheme_row.set_model (new Gtk.StringList(this.available_schemes));
+
+            this.working_directory_row = new Adw.EntryRow ();
+            this.working_directory_row.set_title ("Starting Directory");
+            this.working_directory_row.connect ("changed", this.check_working_directory);
+
+        }
+
+        public void check_working_directory (Adw.EntryRow working_directory_row) {
+            if (GLib.FileUtils.test(working_directory_row.get_text(), GLib.FileTest.IS_DIR)) {
+                this.add_css_class ("error");
+            } else {
+                this.remove_css_class("error");
+            }
+        }
+
+        public void directory_picker_clicked (Gtk.Button, button) {
+            var dialog = new Gtk.FileDialog(); 
+            try {
+                dialog.select_folder (this.dialog, null, select_folder_callback).begin();
+                this.working_directory_row.set_text(file.get_path());
+                this.remove_css_class("error");
+            } catch (GLib.Error) {}
+        }
+
+        public void select_folder_callback(Gtk.FileChooserDialog dialog) {
+            if (response == Gtk.ResponseType.ACCEPT) {
+                this.working_directory_row.set_text(dialog.select_folder_finish());
+                this.remove_css_class("error");
+            }
         }
     }
 }
