@@ -20,12 +20,12 @@ namespace StillTerminal {
     }
 
     public class StPrefsProfileCreator {
-        Adw.PreferencesDialog new_profile_dialog;
-        StPrefsNamePage name_page;
+        public Adw.PreferencesDialog new_profile_dialog;
+        StProfileCreatorNamePage name_page;
 
         public StPrefsProfileCreator () {
             this.new_profile_dialog = new Adw.PreferencesDialog ();
-            this.name_page = new StPrefsNamePage ();
+            this.name_page = new StProfileCreatorNamePage (this);
             this.new_profile_dialog.push_subpage (this.name_page);
         }
 
@@ -34,7 +34,8 @@ namespace StillTerminal {
         }
     }
 
-    public class StPrefsNamePage : Adw.NavigationPage {
+    public class StProfileCreatorNamePage : Adw.NavigationPage {
+        StPrefsProfileCreator dialog;
         Adw.PreferencesGroup pref_group;
         Adw.EntryRow name_row;
         Adw.ExpanderRow type_revealer_row;
@@ -43,12 +44,16 @@ namespace StillTerminal {
         Adw.ActionRow ssh_row;
         Adw.ActionRow custom_distrobox_row;
         CreationType selected_option;
-        Gtk.CheckButton? last_button;
-    
-        public StPrefsNamePage () {
+
+        public StProfileCreatorNamePage (StPrefsProfileCreator dialog) {
+            this.dialog = dialog;
             this.can_pop = false;
             this.title = "New Profile";
+
             var header = new Adw.HeaderBar ();
+            header.set_show_start_title_buttons (false);
+            header.set_show_end_title_buttons (false);
+            
             var preferences_page = new Adw.PreferencesPage ();
             var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
             box.append (header);
@@ -64,6 +69,7 @@ namespace StillTerminal {
             
             this.type_revealer_row = new Adw.ExpanderRow();
             this.type_revealer_row.set_title("Profile Type");
+            this.type_revealer_row.set_subtitle("System Profile");
             this.pref_group.add (this.type_revealer_row);
 
             Gtk.CheckButton? last_button = null;
@@ -73,6 +79,7 @@ namespace StillTerminal {
                 "utilities-terminal-symbolic",
                 CreationType.SYSTEM, last_button
             );
+            last_button.set_active (true);
             this.easy_dev_environment_row = add_check_button(
                 out last_button,
                 "Easy Development Environment", "Setup a quick development environment using DistroBox",
@@ -91,6 +98,20 @@ namespace StillTerminal {
                 "utilities-terminal-symbolic",
                 CreationType.CUSTOM_DISTROBOX, last_button
             );
+
+            var cancel_button = new Gtk.Button.with_label("Cancel");
+            cancel_button.clicked.connect(() => {
+                this.dialog.new_profile_dialog.close();
+            });
+            header.pack_start(cancel_button);
+
+            var next_button = new Gtk.Button.with_label("Next");
+            next_button.add_css_class("suggested-action");
+            next_button.clicked.connect( () => {
+                print("Next button clicked");
+            });
+            header.pack_end(next_button);
+            
         }
     
         public Adw.ActionRow add_check_button (
@@ -102,9 +123,9 @@ namespace StillTerminal {
             Adw.ActionRow row = new Adw.ActionRow();
             row.set_title(title);
             row.set_subtitle(subtitle);
-            Gtk.Image icon = new Gtk.Image.from_icon_name(icon_name);
+            Gtk.Image icon = new Gtk.Image.from_icon_name (icon_name);
             row.add_prefix(icon);
-            button = new Gtk.CheckButton();
+            button = new Gtk.CheckButton ();
             button.valign = Gtk.Align.CENTER;
             button.halign = Gtk.Align.END;
             if (last_button != null) {
@@ -114,10 +135,43 @@ namespace StillTerminal {
             this.type_revealer_row.add_row (row);
             button.toggled.connect((button) => {
                 if (button.active) {
+                    this.type_revealer_row.set_subtitle(row.get_title());
                     this.selected_option = type;
+                    print("clicked");
                 }
             });
+            row.set_activatable_widget (button);
             return row;
+        }
+    }
+
+    public class StProfileCreatorProfilePage : Adw.NavigationPage {
+        StPrefsProfileCreator dialog;
+        Adw.PreferencesGroup pref_group;
+        Adw.EntryRow name_row;
+        Adw.ComboRow color_scheme_row;
+        Adw.EntryRow working_directory_row;
+        Adw.EntryRow spawn_command_row;
+        Adw.EntryRow profile_file_row;
+        Adw.EntryRow icon_name_row;
+        Adw.EntryRow subtitle_row;
+
+        public StProfileCreatorProfilePage () {
+            this.dialog = dialog;
+            this.title = "Profile Settings";
+
+            var header = new Adw.HeaderBar ();
+            header.set_show_start_title_buttons (false);
+            header.set_show_end_title_buttons (false);
+            
+            var preferences_page = new Adw.PreferencesPage ();
+            var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+            box.append (header);
+            box.append (preferences_page);
+
+            this.pref_group = new Adw.PreferencesGroup ();
+            preferences_page.add(this.pref_group);
+            this.set_child(box);
         }
     }
 }
