@@ -1,4 +1,4 @@
-namespace stillTerminal {
+namespace StillTerminal {
     public string[] get_scheme_dirs() {
         string[] user_dirs = {};
         foreach (string dir in GLib.Environment.get_system_data_dirs ()) {
@@ -14,6 +14,3 @@ namespace stillTerminal {
         }
         return user_dirs;
     }
-
-
-}

@@ -19,23 +19,8 @@ namespace StillTerminal {
         public string port;
     }
 
-    public class StPrefsProfileCreator {
-        public Adw.PreferencesDialog new_profile_dialog;
-        StProfileCreatorNamePage name_page;
-
-        public StPrefsProfileCreator () {
-            this.new_profile_dialog = new Adw.PreferencesDialog ();
-            this.name_page = new StProfileCreatorNamePage (this);
-            this.new_profile_dialog.push_subpage (this.name_page);
-        }
-
-        public void present (Gtk.Widget parent) {
-            this.new_profile_dialog.present (parent);
-        }
-    }
-
     public class StProfileCreatorNamePage : Adw.NavigationPage {
-        StPrefsProfileCreator dialog;
+        StPrefsDialog dialog;
         Adw.PreferencesGroup pref_group;
         Adw.EntryRow name_row;
         Adw.ExpanderRow type_revealer_row;
@@ -45,7 +30,7 @@ namespace StillTerminal {
         Adw.ActionRow custom_distrobox_row;
         CreationType selected_option;
 
-        public StProfileCreatorNamePage (StPrefsProfileCreator dialog) {
+        public StProfileCreatorNamePage (StPrefsDialog dialog) {
             this.dialog = dialog;
             this.can_pop = false;
             this.title = "New Profile";
@@ -101,7 +86,7 @@ namespace StillTerminal {
 
             var cancel_button = new Gtk.Button.with_label("Cancel");
             cancel_button.clicked.connect(() => {
-                this.dialog.new_profile_dialog.close ();
+                this.dialog.preferences_dialog.pop_subpage ();
             });
             header.pack_start(cancel_button);
 
@@ -161,9 +146,8 @@ namespace StillTerminal {
         public void push_profile_editor (StProfile profile) {
             var editor_page = new StProfileEditorPage(this.dialog, profile);
             var create_button = new Gtk.Button.with_label("Create");
-            create_button.add_css_class("suggested-action");
-            editor_page.header.pack_end (create_button);
-            this.dialog.new_profile_dialog.push_subpage(editor_page);
+            editor_page.set_button(create_button);
+            this.dialog.preferences_dialog.push_subpage(editor_page);
         }
     }
 }
