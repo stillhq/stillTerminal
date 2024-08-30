@@ -27,7 +27,7 @@ namespace StillTerminal {
         }
     }
 
-    public class StProfile {
+    public class StProfile : GLib.Object {
         public string id;
         public string name;
         public string color_scheme;
@@ -55,6 +55,21 @@ namespace StillTerminal {
             this.type = type;
             this.type_data = type_data;
             this.subtitle = subtitle;
+        }
+
+        public static StProfile? new_blank_profile() {
+            return new StProfile(
+                "",
+                "",
+                "system",
+                GLib.Environment.get_home_dir(),
+                null,
+                null,
+                null,
+                StProfileType.SYSTEM,
+                null,
+                null
+            );
         }
     
         public static StProfile? new_from_json(string filename) {
