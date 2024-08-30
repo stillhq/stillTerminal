@@ -212,7 +212,7 @@ namespace StillTerminal {
                     profiles_empty = true;
                 }
             }
-            
+
             if (!(profiles_empty)) {
                 var profile = get_fallback_profile();
                     profile.id = "default";

@@ -1,12 +1,8 @@
 /* Custom Headerbar COPIED from Blackbox */
-
-.custom-headerbar windowhandle > box {
-    padding-top: 0;
-    padding-bottom: 0;
-}
-
-window:not(.about) headerbar,
 .custom-headerbar {
-    background-color: @window_bg_color;
+    background-color: @headerbar_bg_color;
 }
 
+tabbar {
+    margin-bottom: 100px;
+}
