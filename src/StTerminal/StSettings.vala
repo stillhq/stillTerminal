@@ -47,7 +47,7 @@ namespace StillTerminal {
             settings.bind ("notification-on-task", this, "notification_on_task", SettingsBindFlags.DEFAULT);
         }
   
-        public void bind_to_vte (Adw.Bin bin, Vte.Terminal vte) {
+        public void bind_to_vte (StTerminal bin, Vte.Terminal vte) {
             settings.bind ("cell-height", vte, "cell_height_scale", SettingsBindFlags.DEFAULT);
             settings.bind ("cell-width", vte, "cell_width_scale", SettingsBindFlags.DEFAULT);
             settings.bind ("bold-is-bright", vte, "bold_is_bright", SettingsBindFlags.DEFAULT);
@@ -57,6 +57,26 @@ namespace StillTerminal {
             settings.bind ("padding", bin, "margin-end", SettingsBindFlags.DEFAULT);
             settings.bind ("padding", bin, "margin-top", SettingsBindFlags.DEFAULT);
             settings.bind ("padding", bin, "margin-bottom", SettingsBindFlags.DEFAULT);
+
+            bin.style_manager.notify["dark"].connect(
+                (_style_manager, _pspec) => {
+                    bin.set_appearance ();
+                }
+            );
+
+            if (bin.profile.color_scheme == "system") {
+                this.notify["system-color"].connect(
+                    (_settings, _pspec) => {
+                        bin.set_appearance ();
+                    }
+                );
+            }
+
+            this.notify["use-profile-color"].connect(
+                (_settings, _pspec) => {
+                    bin.set_appearance ();
+                }
+            );
         }
 
         public void bind_to_general (StPrefsGeneralPage general) {

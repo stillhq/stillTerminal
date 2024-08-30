@@ -19,7 +19,6 @@ namespace StillTerminal {
             profiles_group.set_header_suffix (profile_button);
 
             foreach (StProfile profile in profile_index) {
-                print(profile.id);
                 var row = new Adw.ActionRow ();
                 row.set_title (profile.name);
 

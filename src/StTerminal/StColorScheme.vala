@@ -406,6 +406,9 @@ namespace StillTerminal {
         // TODO: Remove this
         available_schemes["Adwaita"] = "/home/cameronknauff/Documents/stillTerminal/data/schemes/Adwaita.json";
         available_schemes["Fedora"] = "/home/cameronknauff/Documents/stillTerminal/data/schemes/Fedora.json";
+        available_schemes["Ubuntu"] = "/home/cameronknauff/Documents/stillTerminal/data/schemes/Ubuntu.json";
+        available_schemes["Debian"] = "/home/cameronknauff/Documents/stillTerminal/data/schemes/Debian.json";
+        // available_schemes["RedHat"] = "/home/cameronknauff/Documents/stillTerminal/data/schemes/RedHat.json";
         
         string[] dirs = get_scheme_dirs();
         try {

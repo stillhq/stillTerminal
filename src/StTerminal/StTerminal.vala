@@ -1,13 +1,17 @@
 namespace StillTerminal {
     public class StTerminal : Adw.Bin {
+        public StProfile profile;
         public Vte.Terminal vte;
-        public StColorScheme color_scheme;
         public StSettings settings;
         public Pango.FontDescription default_font_desc;
+        public Adw.StyleManager style_manager;
 
         public StTerminal (StSettings settings, StProfile profile) {
             Object ();
             this.settings = settings;
+            this.profile = profile;
+
+            this.style_manager = Adw.StyleManager.get_default ();
 
             this.vte = new Vte.Terminal ();
             this.vte.vexpand = true;
@@ -17,18 +21,19 @@ namespace StillTerminal {
 
             // Used if custom font is disabled
             this.default_font_desc = this.vte.get_font ().copy ();
-            this.spawn_profile (profile);
+            this.spawn_profile ();
             this.settings.bind_to_vte (this, this.vte);
         }
 
-        public void spawn_profile (StProfile profile) {
-            set_appearance (profile.color_scheme);
+
+        public void spawn_profile () {
+            set_appearance ();
 
             // Spawn terminal
             this.vte.spawn_async (
                 Vte.PtyFlags.DEFAULT,
-                profile.working_directory,
-                get_spawn_list (profile),
+                this.profile.working_directory,
+                get_spawn_list (this.profile),
                 null,
                 GLib.SpawnFlags.SEARCH_PATH,
                 null,
@@ -84,9 +89,9 @@ namespace StillTerminal {
             return new string[] {GLib.Environment.get_variable ("SHELL")};
         }
 
-        public void set_appearance (string color_scheme_name) {
-            var style_manager = Adw.StyleManager.get_default ();
-            bool is_dark = style_manager.dark;
+        public void set_appearance () {
+            bool is_dark = this.style_manager.dark;
+            string color_scheme_name = this.profile.color_scheme;
             
             if (color_scheme_name == "system" || !(this.settings.use_profile_color)) {
                 color_scheme_name = this.settings.system_color;
