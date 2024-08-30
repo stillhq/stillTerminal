@@ -147,7 +147,7 @@ namespace StillTerminal {
         public void next_page () {
             switch (this.selected_option) {
                 case CreationType.SYSTEM:
-                    break;
+                    this.dialog.new_profile_dialog.push_subpage(new StProfileCreatorProfilePage(this.dialog));
                 case CreationType.PREMADE_DISTROBOX:
                     break;
                 case CreationType.SSH:
@@ -165,10 +165,9 @@ namespace StillTerminal {
         Adw.EntryRow name_row;
         Adw.ComboRow color_scheme_row;
         Adw.EntryRow working_directory_row;
+        Gtk.FileDialog file_dialog;
         Adw.EntryRow spawn_command_row;
-        Adw.EntryRow profile_file_row;
         Adw.EntryRow icon_name_row;
-        Adw.EntryRow subtitle_row;
 
         public StProfileCreatorProfilePage (StPrefsProfileCreator dialog) {
             this.available_schemes = get_available_schemes ().keys.to_array ();
@@ -197,11 +196,25 @@ namespace StillTerminal {
             this.color_scheme_row.set_title ("Color Scheme");
             this.color_scheme_row.set_subtitle ("Color scheme used for this profile");
             this.color_scheme_row.set_model (new Gtk.StringList(this.available_schemes));
+            this.pref_group.add (this.color_scheme_row);
 
             this.working_directory_row = new Adw.EntryRow ();
             this.working_directory_row.set_title ("Starting Directory");
             this.working_directory_row.connect ("changed", this.check_working_directory);
+            Gtk.Button working_directory_button = new Gtk.Button.from_icon_name("folder-open-symbolic");
+            working_directory_button.add_css_class("flat");
+            this.working_directory_row.add_suffix(working_directory_row);
+            this.file_dialog = new Gtk.FileDialog();
+            this.pref_group.add (this.working_directory_row);
 
+            this.spawn_command_row = new Adw.EntryRow ();
+            this.spawn_command_row.set_title ("Profile Starting Command");
+            this.pref_group.add (this.spawn_command_row);
+
+            // This is temporary for testing purposes. This will be replaced with a combo box
+            this.icon_name_row = new Adw.EntryRow ();
+            this.icon_name_row.set_title ("Icon Name");
+            this.pref_group.add (this.icon_name_row);
         }
 
         public void check_working_directory (Adw.EntryRow working_directory_row) {
@@ -212,19 +225,21 @@ namespace StillTerminal {
             }
         }
 
-        public void directory_picker_clicked (Gtk.Button, button) {
-            var dialog = new Gtk.FileDialog(); 
-            try {
-                dialog.select_folder (this.dialog, null, select_folder_callback).begin();
-                this.working_directory_row.set_text(file.get_path());
-                this.remove_css_class("error");
-            } catch (GLib.Error) {}
+        public void directory_picker_clicked (Gtk.Button button) {
+            Gtk.Window window = this.dialog.new_profile_dialog.get_root() as Gtk.Window;
+            this.file_dialog.select_folder.begin (window, null, select_folder_callback);
+            this.remove_css_class("error");
         }
 
-        public void select_folder_callback(Gtk.FileChooserDialog dialog) {
-            if (response == Gtk.ResponseType.ACCEPT) {
-                this.working_directory_row.set_text(dialog.select_folder_finish());
-                this.remove_css_class("error");
+        public void select_folder_callback(GLib.Object? _source_object, GLib.AsyncResult res) {
+            try {
+                string? folder = this.file_dialog.select_folder.end(res).get_path();
+                if (folder != null) {
+                    this.working_directory_row.set_text(folder);
+                    this.remove_css_class("error");
+                }
+            } catch (GLib.Error e) {
+                print("Error selecting folder: " + e.message);
             }
         }
     }
