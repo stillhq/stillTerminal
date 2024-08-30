@@ -19,18 +19,16 @@ namespace StillTerminal {
         public string port;
     }
 
-    public class StProfileCreatorNamePage : Adw.NavigationPage {
+    public class StProfileCreatorTypePage : Adw.NavigationPage {
         StPrefsDialog dialog;
         Adw.PreferencesGroup pref_group;
-        Adw.EntryRow name_row;
-        Adw.ExpanderRow type_revealer_row;
         Adw.ActionRow system_row;
         Adw.ActionRow easy_dev_environment_row;
         Adw.ActionRow ssh_row;
         Adw.ActionRow custom_distrobox_row;
         CreationType selected_option;
 
-        public StProfileCreatorNamePage (StPrefsDialog dialog) {
+        public StProfileCreatorTypePage (StPrefsDialog dialog) {
             this.dialog = dialog;
             this.can_pop = false;
             this.title = "New Profile";
@@ -45,17 +43,9 @@ namespace StillTerminal {
             box.append (preferences_page);
 
             this.pref_group = new Adw.PreferencesGroup ();
+            this.pref_group.set_title("Select Profile Type");
             preferences_page.add(this.pref_group);
             this.set_child(box);
-            
-            this.name_row = new Adw.EntryRow();
-            this.name_row.set_title("Profile Name");
-            this.pref_group.add (this.name_row);
-            
-            this.type_revealer_row = new Adw.ExpanderRow();
-            this.type_revealer_row.set_title("Profile Type");
-            this.type_revealer_row.set_subtitle("System Profile");
-            this.pref_group.add (this.type_revealer_row);
 
             Gtk.CheckButton? last_button = null;
             this.system_row = add_check_button(
@@ -117,12 +107,10 @@ namespace StillTerminal {
                 button.set_group(last_button);
             }
             row.add_suffix(button);
-            this.type_revealer_row.add_row (row);
-            button.toggled.connect((button) => {
+            this.pref_group.add (row);
+            button.toggled.connect ((button) => {
                 if (button.active) {
-                    this.type_revealer_row.set_subtitle(row.get_title());
                     this.selected_option = type;
-                    print("clicked");
                 }
             });
             row.set_activatable_widget (button);

@@ -6,6 +6,7 @@ namespace StillTerminal {
         public Adw.HeaderBar header;
         Adw.PreferencesGroup pref_group;
         Adw.EntryRow name_row;
+        Adw.ActionRow profile_type;
         Adw.ComboRow color_scheme_row;
         Adw.EntryRow working_directory_row;
         Gtk.FileDialog file_dialog;
@@ -14,6 +15,7 @@ namespace StillTerminal {
         Gtk.Button? button;
 
         public StProfileEditorPage (StPrefsDialog dialog, StProfile profile) {
+            this.profile = profile;
             this.available_schemes = get_available_schemes ().keys.to_array ();
             this.dialog = dialog;
             this.title = "Profile Settings";
@@ -35,13 +37,18 @@ namespace StillTerminal {
             this.name_row.set_title ("Profile Name");
             this.name_row.set_input_purpose (Gtk.InputPurpose.NAME);
             this.name_row.changed.connect (this.check_entries);
-            this.name_row.bind_property("changed", profile, "name", GLib.BindingFlags.DEFAULT);
-            
             this.pref_group.add (this.name_row);
+
+            this.profile_type = new Adw.ActionRow ();
+            this.profile_type.set_title ("Profile Type");
+            print(this.profile.type_subtitle);
+            this.profile_type.set_subtitle (this.profile.type_subtitle);
+            this.profile_type.set_sensitive (false);
+            this.pref_group.add (this.profile_type);
+            
 
             this.color_scheme_row = new Adw.ComboRow ();
             this.color_scheme_row.set_title ("Color Scheme");
-            this.color_scheme_row.set_subtitle ("Color scheme used for this profile");
             this.color_scheme_row.set_model (new Gtk.StringList(this.available_schemes));
             this.color_scheme_row.notify["selected"].connect (this.color_scheme_changed);
             this.pref_group.add (this.color_scheme_row);
@@ -52,6 +59,8 @@ namespace StillTerminal {
             this.working_directory_row.changed.connect (this.check_entries);
             Gtk.Button working_directory_button = new Gtk.Button.from_icon_name("folder-open-symbolic");
             working_directory_button.add_css_class("flat");
+            working_directory_button.clicked.connect (this.directory_picker_clicked);
+            working_directory_button.valign = Gtk.Align.CENTER;
             this.working_directory_row.add_suffix(working_directory_button);
             this.file_dialog = new Gtk.FileDialog();
             this.pref_group.add (this.working_directory_row);
@@ -67,11 +76,9 @@ namespace StillTerminal {
             this.icon_name_row = new Adw.EntryRow ();
             this.icon_name_row.set_title ("Icon Name");
             this.icon_name_row.changed.connect (() => {
-                profile.icon_name = this.icon_name_row.get_text();
+                profile.icon_name = this.icon_name_row.get_text ();
             });
             this.pref_group.add (this.icon_name_row);
-
-            check_entries(null);
         }
 
         public void color_scheme_changed (GLib.Object? _source_object, GLib.ParamSpec? _pspec) {
@@ -98,15 +105,13 @@ namespace StillTerminal {
                 this.set_button_sensitive(false);
             } else {
                 this.name_row.remove_css_class("error");
-                this.profile.name = this.name_row.get_text();
             }
 
-            if (GLib.FileUtils.test(this.working_directory_row.get_text(), GLib.FileTest.IS_DIR)) {
+            if (!(GLib.FileUtils.test(this.working_directory_row.get_text(), GLib.FileTest.IS_DIR))) {
                 this.working_directory_row.add_css_class ("error");
                 this.set_button_sensitive(false);
             } else {
                 this.working_directory_row.remove_css_class("error");
-                this.profile.working_directory = this.working_directory_row.get_text();
             }
         }
 
@@ -130,7 +135,7 @@ namespace StillTerminal {
     }
 
     public bool are_all_chars_in_alphabet(string input) {
-        string alphabet = " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        string alphabet = " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
     
         for (int i = 0; i < input.length; i++) {
             unichar c = input[i];

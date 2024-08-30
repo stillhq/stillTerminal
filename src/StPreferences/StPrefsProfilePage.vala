@@ -13,7 +13,7 @@ namespace StillTerminal {
             var profile_button = new Gtk.Button ();
             profile_button.set_label ("New Profile");
             profile_button.clicked.connect (() => {
-                var profile_creator = new StProfileCreatorNamePage (this.dialog);
+                var profile_creator = new StProfileCreatorTypePage (this.dialog);
                 this.dialog.preferences_dialog.push_subpage (profile_creator);
             });
             profiles_group.set_header_suffix (profile_button);
@@ -31,8 +31,8 @@ namespace StillTerminal {
                 }
                 row.add_prefix (icon);
 
-                if (profile.subtitle != null) {
-                    row.set_subtitle (profile.subtitle);
+                if (profile.type_subtitle != null) {
+                    row.set_subtitle (profile.type_subtitle);
                 }
                 profiles_group.add (row);
             }

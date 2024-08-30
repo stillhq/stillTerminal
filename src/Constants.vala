@@ -14,3 +14,4 @@ namespace StillTerminal {
         }
         return user_dirs;
     }
+}

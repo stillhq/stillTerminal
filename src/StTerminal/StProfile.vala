@@ -37,13 +37,13 @@ namespace StillTerminal {
         public string? icon_name;
         public StProfileType type;
         public string[]? type_data;
-        public string? subtitle;
+        public string? type_subtitle;
     
         public StProfile (
             string id, string name, string color_scheme, string working_directory,
             string? spawn_command = null, string? profile_file = null,
             string? icon_name = null, StProfileType type = StProfileType.SYSTEM,
-            string[]? type_data = null, string? subtitle = null
+            string[]? type_data = null, string? type_subtitle = null
         ) {
             this.id = id;
             this.name = name;
@@ -54,7 +54,7 @@ namespace StillTerminal {
             this.icon_name = icon_name;
             this.type = type;
             this.type_data = type_data;
-            this.subtitle = subtitle;
+            this.type_subtitle = type_subtitle;
         }
 
         public static StProfile? new_blank_profile() {
@@ -107,7 +107,7 @@ namespace StillTerminal {
                 obj.has_member("icon-name") ? obj.get_string_member("icon-name") : "",
                 profile_type,
                 type_data,
-                obj.has_member("subtitle") ? obj.get_string_member("subtitle") : ""
+                obj.has_member("type_subtitle") ? obj.get_string_member("type_subtitle") : ""
             );
         }
     
@@ -122,7 +122,7 @@ namespace StillTerminal {
             if (this.icon_name != null) hash["icon_name"] = this.icon_name;
             hash["type"] = this.type.to_string();
             if (this.type_data != null) hash["type_data"] = string.joinv(",", this.type_data);
-            if (this.subtitle != null) hash["subtitle"] = this.subtitle;
+            if (this.type_subtitle != null) hash["type_subtitle"] = this.type_subtitle;
             return hash;
         }
     
@@ -147,6 +147,7 @@ namespace StillTerminal {
             builder.end_object();
     
             var generator = new Json.Generator();
+            generator.set_pretty(true);
             generator.set_root(builder.get_root());
     
             try {
@@ -195,16 +196,32 @@ namespace StillTerminal {
         if (!(file.query_exists())) {
             try {
                 file.make_directory_with_parents();
-
-                // Create a default profile
-                var profile = get_fallback_profile();
-                profile.id = "default";
-                profile.name = "Default";
-                profile.subtitle = "stillOS";
-                profile.save_to_json(file.get_child("default.json").get_path());
             } catch (GLib.Error e) {
                 print("Error creating profile directory: %s\n".printf(e.message));
             }
+        }
+
+        // Checking if a directory is empty and making a default profile if it is
+        try {
+            Dir dir = Dir.open(file.get_path(), 0);
+            string? name = null;
+            bool profiles_empty = false;
+
+            while ((name = dir.read_name()) != null) {
+                if (name != "." && name != "..") {
+                    profiles_empty = true;
+                }
+            }
+            
+            if (!(profiles_empty)) {
+                var profile = get_fallback_profile();
+                    profile.id = "default";
+                    profile.name = "Default";
+                    profile.type_subtitle = "stillOS Default Profile";
+                    profile.save_to_json(file.get_child("default.json").get_path());
+            }
+        } catch (GLib.FileError e) {
+            print("Error opening profile directory: %s\n".printf(e.message));
         }
 
         return file.get_path ();
