@@ -257,7 +257,6 @@ namespace StillTerminal {
             return {get_fallback_profile ()};
         }
 
-        print(profiles.length.to_string());
         return profiles;
     }
 }

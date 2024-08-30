@@ -17,13 +17,13 @@ namespace StillTerminal {
 
             // Used if custom font is disabled
             this.default_font_desc = this.vte.get_font ().copy ();
-
             this.spawn_profile (profile);
             this.settings.bind_to_vte (this, this.vte);
         }
 
         public void spawn_profile (StProfile profile) {
             set_appearance (profile.color_scheme);
+
             // Spawn terminal
             this.vte.spawn_async (
                 Vte.PtyFlags.DEFAULT,
@@ -40,13 +40,12 @@ namespace StillTerminal {
 
         public string[] get_spawn_list (StProfile profile) {
             string[] type_data = profile.type_data;
-            
-            string[] spawn_args = profile.spawn_command.split(" ");
             switch (profile.type) {
                 default:
                     if (profile.spawn_command == null) {
                         return new string[] {GLib.Environment.get_variable ("SHELL")};
                     }
+                    string[] spawn_args = profile.spawn_command.split(" ");
                     if (spawn_args.length == 0) {
                         return new string[] {GLib.Environment.get_variable ("SHELL")};
                     }
@@ -66,7 +65,13 @@ namespace StillTerminal {
                     foreach (string arg in type_data[1:type_data.length]) {
                         distrobox_cmd += arg;
                     }
+                    if (profile.spawn_command == null) {
+                        return distrobox_cmd;
+                    }
+
                     distrobox_cmd += "--";
+
+                    string[] spawn_args = profile.spawn_command.split(" ");
                     foreach (string arg in spawn_args) {
                         distrobox_cmd += arg;
                     }

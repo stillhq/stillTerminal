@@ -9,6 +9,7 @@
         this.settings = new StillTerminal.StSettings ();
         this.default_height = this.settings.window_height;
         this.default_width = this.settings.window_width;
+        this.add_css_class("transparent-window");
 
         // Load the CSS file
         var css_provider = new Gtk.CssProvider ();
@@ -17,8 +18,6 @@
         Gtk.StyleContext.add_provider_for_display (
             Gdk.Display.get_default (), css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
         );
-
-        var header = new Adw.HeaderBar ();
 
         this.tab_view = new Adw.TabView ();
 
@@ -35,7 +34,7 @@
 
     public Adw.TabPage add_tab (StProfile profile) {
         var page = new StTerminalPage (this.settings, profile);
-        Adw.TabPage tab_page = this.tab_view.add_page (page.scrolled_window, null);
+        Adw.TabPage tab_page = this.tab_view.append (page.scrolled_window);
         tab_page.title = profile.name;
 
         return tab_page;
