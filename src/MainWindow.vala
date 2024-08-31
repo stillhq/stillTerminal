@@ -36,8 +36,16 @@
         var page = new StTerminalPage (this.settings, profile);
         Adw.TabPage tab_page = this.tab_view.append (page.scrolled_window);
         tab_page.title = profile.name;
-
+        page.terminal.set_name_delegate ((name) => {
+            this.set_page_name (tab_page, profile, name);
+        });
+        this.tab_view.set_selected_page (tab_page);
         return tab_page;
+    }
+
+    public void set_page_name (Adw.TabPage page, StProfile profile, string name) {
+        page.title = name;
+
     }
 
     public override void size_allocate (int width, int height, int baseline) {

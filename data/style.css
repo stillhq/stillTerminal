@@ -3,7 +3,7 @@
     background-color: @headerbar_bg_color;
 }
 
-.custom-headerbar.backdrop {
+/* .custom-headerbar.backdrop {
     background-color: var(--headerbar-backdrop-color);
     transition: background-color 200ms ease-out;
   }
@@ -14,7 +14,7 @@
   }
 .transparent-window {
     background-color: transparent;
-}
+} */
 
 tabbar {
     margin-bottom: 100px;

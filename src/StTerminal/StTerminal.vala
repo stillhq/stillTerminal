@@ -5,6 +5,7 @@ namespace StillTerminal {
         public StSettings settings;
         public Pango.FontDescription default_font_desc;
         public Adw.StyleManager style_manager;
+        public delegate void SetName (string name);
 
         public StTerminal (StSettings settings, StProfile profile) {
             Object ();
@@ -23,6 +24,12 @@ namespace StillTerminal {
             this.default_font_desc = this.vte.get_font ().copy ();
             this.spawn_profile ();
             this.settings.bind_to_vte (this, this.vte);
+        }
+
+        public void set_name_delegate (SetName set_name) {
+            this.vte.window_title_changed.connect ((vte) => {
+                set_name (vte.get_window_title ());
+            });
         }
 
 

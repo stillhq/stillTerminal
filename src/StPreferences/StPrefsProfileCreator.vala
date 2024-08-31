@@ -145,6 +145,8 @@ namespace StillTerminal {
         public void create_profile_button (StProfileEditorPage editor_page) {
             this.dialog.preferences_dialog.pop_subpage ();
             var profile = editor_page.get_edited_profile();
+            this.dialog.window.add_tab(profile);
+            this.dialog.preferences_dialog.close();
         }
     }
 }

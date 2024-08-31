@@ -105,6 +105,7 @@ namespace StillTerminal {
                 this.profile.type_data,
                 this.profile.type_subtitle
             );
+            return profile;
         }
 
         public void color_scheme_changed (GLib.Object? _source_object, GLib.ParamSpec? _pspec) {
