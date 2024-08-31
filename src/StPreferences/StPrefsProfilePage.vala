@@ -23,11 +23,12 @@ namespace StillTerminal {
                 row.set_title (profile.name);
 
                 Gtk.Image icon;
-                if (profile.icon_name != null) {
-                    icon = new Gtk.Image.from_icon_name (profile.icon_name);
+                if (profile.icon_name != null && profile.icon_name in StillTerminal.AVAILABLE_ICONS) {
+                    icon = new Gtk.Image.from_resource (@"/io/stillhq/terminal/icons/$(profile.icon_name).svg");
                 } else {
                     icon = new Gtk.Image.from_icon_name ("utilities-terminal-symbolic");
                 }
+                icon.set_pixel_size (32);
                 row.add_prefix (icon);
 
                 if (profile.type_subtitle != null) {

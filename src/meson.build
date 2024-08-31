@@ -3,6 +3,7 @@ sources = files(
   'MainWindow.vala',
 )
 
+subdir('data')
 subdir('StTerminal')
 subdir('StWidgets')
 subdir('StPreferences')

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/io/stillhq/terminal">
+    <file>style.css</file>
+    <file>io.stillhq.terminal.gschema.xml</file>
+    <file preprocess="xml-stripblanks">icons/almalinux.svg</file>
+    <file preprocess="xml-stripblanks">icons/alpine.svg</file>
+    <file preprocess="xml-stripblanks">icons/archlinux.svg</file>
+    <file preprocess="xml-stripblanks">icons/centos.svg</file>
+    <file preprocess="xml-stripblanks">icons/debian.svg</file>
+    <file preprocess="xml-stripblanks">icons/fedora.svg</file>
+    <file preprocess="xml-stripblanks">icons/opensuse.svg</file>
+    <file preprocess="xml-stripblanks">icons/ubuntu.svg</file>
+    <file preprocess="xml-stripblanks">icons/redhat.svg</file>
+  </gresource>
+</gresources>

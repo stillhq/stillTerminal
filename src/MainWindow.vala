@@ -15,7 +15,7 @@
         // Load the CSS file
         var css_provider = new Gtk.CssProvider ();
         // TODO: Change this to be a gresource
-        css_provider.load_from_path ("/home/cameronknauff/Documents/stillTerminal/data/style.css");
+        css_provider.load_from_resource ("/io/stillhq/terminal/style.css");
         Gtk.StyleContext.add_provider_for_display (
             Gdk.Display.get_default (), css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
         );
@@ -32,14 +32,6 @@
         // this.connect ("allocate-size", this.window_resized);
 
         this.content = box;
-
-        //  this.tab_view.notify["selected-page"].connect (() => {
-        //      var page = this.tab_view.get_selected_page ().get_child ();
-        //      this.header.window_title.set_title (
-        //          page.terminal.profile.name + ": " +
-        //          page.terminal.vte.get_window_title ()
-        //      );
-        //  });
     }
 
     public Adw.TabPage add_tab (StProfile profile) {
