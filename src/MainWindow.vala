@@ -10,7 +10,7 @@
         this.settings = new StillTerminal.StSettings ();
         this.default_height = this.settings.window_height;
         this.default_width = this.settings.window_width;
-        this.add_css_class("transparent-window");
+        this.add_css_class ("transparent-window");
 
         // Load the CSS file
         var css_provider = new Gtk.CssProvider ();

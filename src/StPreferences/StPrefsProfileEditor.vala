@@ -94,7 +94,7 @@ namespace StillTerminal {
 
         public StProfile get_edited_profile () {
             var profile = new StProfile (
-                this.profile.id,
+                this.name_row.get_text ().ascii_down (). replace (" ", "_"),
                 this.name_row.get_text(),
                 this.available_schemes[this.color_scheme_row.get_selected()],
                 this.working_directory_row.get_text(),
