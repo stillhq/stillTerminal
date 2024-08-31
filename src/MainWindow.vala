@@ -20,8 +20,8 @@
             Gdk.Display.get_default (), css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
         );
 
-        this.header = new StHeaderBar (this);
         this.tab_view = new Adw.TabView ();
+        this.header = new StHeaderBar (this);
 
         var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
         box.append (this.header);
@@ -32,6 +32,14 @@
         // this.connect ("allocate-size", this.window_resized);
 
         this.content = box;
+
+        //  this.tab_view.notify["selected-page"].connect (() => {
+        //      var page = this.tab_view.get_selected_page ().get_child ();
+        //      this.header.window_title.set_title (
+        //          page.terminal.profile.name + ": " +
+        //          page.terminal.vte.get_window_title ()
+        //      );
+        //  });
     }
 
     public Adw.TabPage add_tab (StProfile profile) {
@@ -42,20 +50,23 @@
         this.tab_view.set_selected_page (tab_page);
 
         tab_page.notify["title"].connect (() => {
-            if (this.tab_view.get_n_pages () < 2 && this.tab_view.get_selected_page () == tab_page) {
-                this.header.window_title.set_title (page.terminal.vte.get_window_title ());
-                if (page.terminal.profile.type_subtitle != null) {
-                    this.header.window_title.set_subtitle (page.terminal.profile.type_subtitle);
-                }
+            if (this.tab_view.get_n_pages () <= 1 && this.tab_view.get_selected_page () == tab_page) {
+                set_window_title (tab_page, page.terminal);
             }
-        }); 
+        });
+
+        tab_page.notify["selected"].connect (() => {
+            set_window_title (tab_page, page.terminal);
+        });
 
         return tab_page;
     }
 
-    public void set_page_name (Adw.TabPage page, StProfile profile, string name) {
-        page.title = name;
-
+    public void set_window_title (Adw.TabPage tab_page, StTerminal terminal) {
+        this.header.window_title.set_title (
+            terminal.profile.name + ": " +
+            terminal.vte.get_window_title ()
+        );
     }
 
     public override void size_allocate (int width, int height, int baseline) {

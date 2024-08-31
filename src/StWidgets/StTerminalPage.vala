@@ -11,8 +11,6 @@ namespace StillTerminal {
             scrolled_window.set_overlay_scrolling (true);
             scrolled_window.set_policy (Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
             scrolled_window.set_child (terminal);
-
-            // tab_page.child = scrolled_window;
         }
     }
 }

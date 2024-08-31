@@ -133,8 +133,6 @@ namespace StillTerminal {
                 palette = color_scheme.get_light_rgba_palette ();
             }
 
-            // WTF IS THIS NOT WORKING!?
-            // Maybe change widget
             background_color.alpha = (float) this.settings.opacity * 0.01f;
 
             this.vte.set_color_cursor ( bold_color );

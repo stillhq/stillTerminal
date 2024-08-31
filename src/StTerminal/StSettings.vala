@@ -77,6 +77,11 @@ namespace StillTerminal {
                     bin.set_appearance ();
                 }
             );
+            this.notify["opacity"].connect(
+                (_settings, _pspec) => {
+                    bin.set_appearance ();
+                }
+            );
         }
 
         public void bind_to_general (StPrefsGeneralPage general) {
@@ -93,7 +98,6 @@ namespace StillTerminal {
             settings.bind ("opacity", general.appearance_group.opacity_setting, "value", SettingsBindFlags.DEFAULT);
             settings.bind ("use-custom-font", general.appearance_group.use_custom_font, "active", SettingsBindFlags.DEFAULT);
             settings.bind ("use-custom-font", general.appearance_group.custom_font, "sensitive", SettingsBindFlags.DEFAULT);
-            //settings.bind ("custom-font", general.appearance_group.custom_font, "value", SettingsBindFlags.DEFAULT);
             settings.bind ("bold-is-bright", general.appearance_group.bold_is_bright, "active", SettingsBindFlags.DEFAULT);
 
             // Connecting dropdown to system color
