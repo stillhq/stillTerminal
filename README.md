@@ -1,4 +1,4 @@
-# stillTerm
+# stillTerminal
 
 A terminal emulator for stillOS that integrates with containers.
 
@@ -7,5 +7,5 @@ A terminal emulator for stillOS that integrates with containers.
 ```Bash
 $ meson build
 $ ninja -C build
-$ build/stillterm
+$ build/stillTerminal
 ```
