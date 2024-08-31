@@ -94,12 +94,10 @@ namespace StillTerminal {
                     app.remove_action (profile.id);
                 }
                 app.add_action (action);
-
-                print(profile.id);
-                print(profile.name);
-                menu.append(profile.name, profile.id);
+                menu.append(profile.name, "app." + profile.id);
             }
-            this.new_tab_button.set_menu_model (menu);
+            var popover = new Gtk.PopoverMenu.from_model (menu);
+            this.new_tab_button.set_popover (popover);
         }
     }
 }

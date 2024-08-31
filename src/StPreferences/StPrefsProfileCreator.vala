@@ -55,24 +55,29 @@ namespace StillTerminal {
                 CreationType.SYSTEM, last_button
             );
             last_button.set_active (true);
-            this.easy_dev_environment_row = add_check_button(
-                out last_button,
-                "Easy Development Environment", "Setup a quick development environment using DistroBox",
-                "utilities-terminal-symbolic",
-                CreationType.PREMADE_DISTROBOX, last_button
-            );
-            this.ssh_row = add_check_button(
-                out last_button,
-                "SSH Profile", "Use an SSH profile",
-                "utilities-terminal-symbolic",
-                CreationType.SSH, last_button
-            );
-            this.custom_distrobox_row = add_check_button(
-                out last_button,
-                "Custom Distrobox Profile", "Create a custom distrobox profile",
-                "utilities-terminal-symbolic",
-                CreationType.CUSTOM_DISTROBOX, last_button
-            );
+            var more_soon = new Adw.ActionRow();
+            more_soon.set_title("More options coming soon");
+            more_soon.set_subtitle("We're working on adding more profile types");
+            this.pref_group.add (more_soon);
+
+            //  this.easy_dev_environment_row = add_check_button(
+            //      out last_button,
+            //      "Easy Development Environment", "Setup a quick development environment using DistroBox",
+            //      "utilities-terminal-symbolic",
+            //      CreationType.PREMADE_DISTROBOX, last_button
+            //  );
+            //  this.ssh_row = add_check_button(
+            //      out last_button,
+            //      "SSH Profile", "Use an SSH profile",
+            //      "utilities-terminal-symbolic",
+            //      CreationType.SSH, last_button
+            //  );
+            //  this.custom_distrobox_row = add_check_button(
+            //      out last_button,
+            //      "Custom Distrobox Profile", "Create a custom distrobox profile",
+            //      "utilities-terminal-symbolic",
+            //      CreationType.CUSTOM_DISTROBOX, last_button
+            //  );
 
             var cancel_button = new Gtk.Button.with_label("Cancel");
             cancel_button.clicked.connect(() => {
@@ -143,10 +148,10 @@ namespace StillTerminal {
         }
 
         public void create_profile_button (StProfileEditorPage editor_page) {
-            this.dialog.preferences_dialog.pop_subpage ();
             var profile = editor_page.get_edited_profile();
             profile.save_to_json (get_local_profile_dir() + "/" + profile.id + ".json");
             this.dialog.window.add_tab(profile);
+            this.dialog.window.header.update_new_tab_menu();
             this.dialog.preferences_dialog.close();
         }
     }
