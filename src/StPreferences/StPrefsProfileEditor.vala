@@ -17,6 +17,8 @@ namespace StillTerminal {
         public StProfileEditorPage (StPrefsDialog dialog, StProfile profile) {
             this.profile = profile;
             this.available_schemes = get_available_schemes ().keys.to_array ();
+            this.available_schemes += "System";
+            this.available_schemes.move (this.available_schemes.length - 1, 0, 1);
             this.dialog = dialog;
             this.title = "Profile Settings";
 
@@ -34,14 +36,14 @@ namespace StillTerminal {
             this.set_child (box);
 
             this.name_row = new Adw.EntryRow ();
-            this.name_row.set_title ("Profile Name");
+            this.name_row.set_title ("Profile Name (Required)");
             this.name_row.set_input_purpose (Gtk.InputPurpose.NAME);
+            this.name_row.set_text (profile.name);
             this.name_row.changed.connect (this.check_entries);
             this.pref_group.add (this.name_row);
 
             this.profile_type = new Adw.ActionRow ();
             this.profile_type.set_title ("Profile Type");
-            print(this.profile.type_subtitle);
             this.profile_type.set_subtitle (this.profile.type_subtitle);
             this.profile_type.set_sensitive (false);
             this.pref_group.add (this.profile_type);
@@ -51,10 +53,16 @@ namespace StillTerminal {
             this.color_scheme_row.set_title ("Color Scheme");
             this.color_scheme_row.set_model (new Gtk.StringList(this.available_schemes));
             this.color_scheme_row.notify["selected"].connect (this.color_scheme_changed);
+            for (int i = 0; i < this.available_schemes.length; i++) {
+                if (this.available_schemes[i] == this.profile.color_scheme) {
+                    this.color_scheme_row.set_selected (i);
+                    break;
+                }
+            }
             this.pref_group.add (this.color_scheme_row);
 
             this.working_directory_row = new Adw.EntryRow ();
-            this.working_directory_row.set_text(GLib.Environment.get_home_dir());
+            this.working_directory_row.set_text(profile.working_directory);
             this.working_directory_row.set_title ("Starting Directory");
             this.working_directory_row.changed.connect (this.check_entries);
             Gtk.Button working_directory_button = new Gtk.Button.from_icon_name("folder-open-symbolic");
@@ -67,6 +75,9 @@ namespace StillTerminal {
 
             this.spawn_command_row = new Adw.EntryRow ();
             this.spawn_command_row.set_title ("Profile Starting Command");
+            if (profile.spawn_command != null) {
+                this.spawn_command_row.set_text (profile.spawn_command);
+            }
             this.spawn_command_row.changed.connect (() => {
                 profile.spawn_command = this.spawn_command_row.get_text();
             });
@@ -79,6 +90,21 @@ namespace StillTerminal {
                 profile.icon_name = this.icon_name_row.get_text ();
             });
             this.pref_group.add (this.icon_name_row);
+        }
+
+        public StProfile get_edited_profile () {
+            var profile = new StProfile (
+                this.profile.id,
+                this.name_row.get_text(),
+                this.available_schemes[this.color_scheme_row.get_selected()],
+                this.working_directory_row.get_text(),
+                this.spawn_command_row.get_text(),
+                this.profile.profile_file,
+                this.icon_name_row.get_text(),
+                this.profile.type,
+                this.profile.type_data,
+                this.profile.type_subtitle
+            );
         }
 
         public void color_scheme_changed (GLib.Object? _source_object, GLib.ParamSpec? _pspec) {

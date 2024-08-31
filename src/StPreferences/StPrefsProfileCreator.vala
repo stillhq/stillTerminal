@@ -134,8 +134,17 @@ namespace StillTerminal {
         public void push_profile_editor (StProfile profile) {
             var editor_page = new StProfileEditorPage(this.dialog, profile);
             var create_button = new Gtk.Button.with_label("Create");
+            create_button.set_sensitive (false);
+            create_button.clicked.connect(() => {
+                this.create_profile_button (editor_page);
+            });
             editor_page.set_button(create_button);
             this.dialog.preferences_dialog.push_subpage(editor_page);
+        }
+
+        public void create_profile_button (StProfileEditorPage editor_page) {
+            this.dialog.preferences_dialog.pop_subpage ();
+            var profile = editor_page.get_edited_profile();
         }
     }
 }
