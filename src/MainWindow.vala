@@ -2,6 +2,7 @@
     public Adw.TabBar tab_bar;
     public Adw.TabView tab_view;
     public StillTerminal.StSettings settings;
+    public StHeaderBar header;
 
     public MainWindow (Adw.Application app) {
         Object (application: app);
@@ -19,11 +20,12 @@
             Gdk.Display.get_default (), css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
         );
 
+        this.header = new StHeaderBar (this);
         this.tab_view = new Adw.TabView ();
 
         var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
-        box.append (new StHeaderBar (this));
-        box.append (tab_view);
+        box.append (this.header);
+        box.append (this.tab_view);
 
         this.add_tab (get_default_profile ());
         this.add_tab (get_fallback_profile ());
@@ -36,10 +38,18 @@
         var page = new StTerminalPage (this.settings, profile);
         Adw.TabPage tab_page = this.tab_view.append (page.scrolled_window);
         tab_page.title = profile.name;
-        page.terminal.set_name_delegate ((name) => {
-            this.set_page_name (tab_page, profile, name);
-        });
+        page.terminal.set_tab_page (tab_page);
         this.tab_view.set_selected_page (tab_page);
+
+        tab_page.notify["title"].connect (() => {
+            if (this.tab_view.get_n_pages () < 2 && this.tab_view.get_selected_page () == tab_page) {
+                this.header.window_title.set_title (page.terminal.vte.get_window_title ());
+                if (page.terminal.profile.type_subtitle != null) {
+                    this.header.window_title.set_subtitle (page.terminal.profile.type_subtitle);
+                }
+            }
+        }); 
+
         return tab_page;
     }
 

@@ -1,6 +1,6 @@
 namespace StillTerminal {
     public class StHeaderBar : Adw.Bin {
-        Adw.WindowTitle window_title;
+        public Adw.WindowTitle window_title;
         Adw.TabBar tab_bar;
         Gtk.Button new_tab_button;
         Gtk.Button settings_button;
@@ -55,14 +55,14 @@ namespace StillTerminal {
             this.settings_button = new Gtk.Button.from_icon_name ("settings-symbolic");
             this.settings_button.clicked.connect (() => {
                 var dialog = new StPrefsDialog (main_window);
-                dialog.present(this);
+                dialog.present (this);
             });
             add_button_to_box (this.settings_button);
             
-            var end_controls = new Gtk.WindowControls(Gtk.PackType.END);
-            end_controls.set_margin_end(5);
-            end_controls.add_css_class("custom-headerbar");
-            this.box.append(end_controls);
+            var end_controls = new Gtk.WindowControls (Gtk.PackType.END);
+            end_controls.set_margin_end (5);
+            end_controls.add_css_class ("custom-headerbar");
+            this.box.append (end_controls);
         }
 
         public void add_button_to_box(Gtk.Button button) {
@@ -71,7 +71,7 @@ namespace StillTerminal {
             button.set_margin_end(5);
             button.vexpand = true;
             button.valign = Gtk.Align.CENTER;
-            this.box.append(button);
+            this.box.append (button);
         }
     }
 }

@@ -5,7 +5,7 @@ namespace StillTerminal {
         public StSettings settings;
         public Pango.FontDescription default_font_desc;
         public Adw.StyleManager style_manager;
-        public delegate void SetName (string name);
+        public Adw.TabPage? tab_page;
 
         public StTerminal (StSettings settings, StProfile profile) {
             Object ();
@@ -26,9 +26,11 @@ namespace StillTerminal {
             this.settings.bind_to_vte (this, this.vte);
         }
 
-        public void set_name_delegate (SetName set_name) {
-            this.vte.window_title_changed.connect ((vte) => {
-                set_name (vte.get_window_title ());
+        public void set_tab_page (Adw.TabPage tab_page) {
+            this.tab_page = tab_page;
+            this.vte.window_title_changed.connect (() => {
+                string title = profile.name + ": " + this.vte.get_window_title ();
+                this.tab_page.set_title (title);
             });
         }
 
