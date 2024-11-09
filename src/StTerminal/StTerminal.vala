@@ -1,5 +1,5 @@
 namespace StillTerminal {
-    public class StTerminal : Adw.Bin {
+    public class StTerminal : Vte.Terminal {
         public StProfile profile;
         public Vte.Terminal vte;
         public StSettings settings;
@@ -14,32 +14,29 @@ namespace StillTerminal {
 
             this.style_manager = Adw.StyleManager.get_default ();
 
-            this.vte = new Vte.Terminal ();
-            this.vte.vexpand = true;
-            this.vte.hexpand = true;
-            this.child = this.vte;
-            this.vte.set_enable_fallback_scrolling(false);
+            this.vexpand = true;
+            this.hexpand = true;
+            this.set_enable_fallback_scrolling(true);
 
             // Used if custom font is disabled
-            this.default_font_desc = this.vte.get_font ().copy ();
+            this.default_font_desc = this.get_font ().copy ();
             this.spawn_profile ();
-            this.settings.bind_to_vte (this, this.vte);
+            this.settings.bind_to_vte (this);
         }
 
         public void set_tab_page (Adw.TabPage tab_page) {
             this.tab_page = tab_page;
-            this.vte.window_title_changed.connect (() => {
-                string title = profile.name + ": " + this.vte.get_window_title ();
+            this.window_title_changed.connect (() => {
+                string title = profile.name + ": " + this.get_window_title ();
                 this.tab_page.set_title (title);
             });
         }
-
 
         public void spawn_profile () {
             set_appearance ();
 
             // Spawn terminal
-            this.vte.spawn_async (
+            this.spawn_async (
                 Vte.PtyFlags.DEFAULT,
                 this.profile.working_directory,
                 get_spawn_list (this.profile),
@@ -135,18 +132,18 @@ namespace StillTerminal {
 
             background_color.alpha = (float) this.settings.opacity * 0.01f;
 
-            this.vte.set_color_cursor ( bold_color );
-            this.vte.set_color_cursor ( cursor_color );
-            this.vte.set_colors (
+            this.set_color_cursor ( bold_color );
+            this.set_color_cursor ( cursor_color );
+            this.set_colors (
                 foreground_color, background_color, palette
             );
 
             // Set font
             if (this.settings.use_custom_font) {
                 var font_desc = Pango.FontDescription.from_string (this.settings.custom_font);
-                this.vte.set_font (font_desc);
+                this.set_font (font_desc);
             } else {
-                this.vte.set_font (this.default_font_desc);
+                this.set_font (this.default_font_desc);
             }
         }
     }

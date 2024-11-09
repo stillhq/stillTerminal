@@ -98,6 +98,7 @@ namespace StillTerminal {
         public Adw.SwitchRow use_custom_font;
         public Adw.ActionRow custom_font;
         public Adw.SwitchRow bold_is_bright;
+        public Adw.SwitchRow show_scrollbars;
         public Gtk.FontDialogButton font_button;
         public Gtk.FontDialog font_dialog;
 
@@ -130,6 +131,9 @@ namespace StillTerminal {
             this.bold_is_bright = new Adw.SwitchRow ();
             this.bold_is_bright.set_title ("Bold is Bright");
 
+            this.show_scrollbars = new Adw.SwitchRow ();
+            this.show_scrollbars.set_title ("Hide Scrollbars");
+
             this.use_custom_font = new Adw.SwitchRow ();
             this.use_custom_font.set_title ("Use Custom Font");
 
@@ -148,6 +152,7 @@ namespace StillTerminal {
             this.add (this.padding);
             this.add (this.opacity_setting);
             this.add (this.bold_is_bright);
+            this.add (this.show_scrollbars);
             this.add (this.use_custom_font);
             this.add (this.custom_font);
         }

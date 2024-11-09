@@ -47,39 +47,39 @@ namespace StillTerminal {
             settings.bind ("notification-on-task", this, "notification_on_task", SettingsBindFlags.DEFAULT);
         }
   
-        public void bind_to_vte (StTerminal bin, Vte.Terminal vte) {
+        public void bind_to_vte (StTerminal vte) {
             settings.bind ("cell-height", vte, "cell_height_scale", SettingsBindFlags.DEFAULT);
             settings.bind ("cell-width", vte, "cell_width_scale", SettingsBindFlags.DEFAULT);
             settings.bind ("bold-is-bright", vte, "bold_is_bright", SettingsBindFlags.DEFAULT);
             settings.bind ("scrollback-limit", vte, "scrollback_lines", SettingsBindFlags.DEFAULT);
     
-            settings.bind ("padding", bin, "margin-start", SettingsBindFlags.DEFAULT);
-            settings.bind ("padding", bin, "margin-end", SettingsBindFlags.DEFAULT);
-            settings.bind ("padding", bin, "margin-top", SettingsBindFlags.DEFAULT);
-            settings.bind ("padding", bin, "margin-bottom", SettingsBindFlags.DEFAULT);
+            settings.bind ("padding", vte, "margin-start", SettingsBindFlags.DEFAULT);
+            settings.bind ("padding", vte, "margin-end", SettingsBindFlags.DEFAULT);
+            settings.bind ("padding", vte, "margin-top", SettingsBindFlags.DEFAULT);
+            settings.bind ("padding", vte, "margin-bottom", SettingsBindFlags.DEFAULT);
 
-            bin.style_manager.notify["dark"].connect(
+            vte.style_manager.notify["dark"].connect(
                 (_style_manager, _pspec) => {
-                    bin.set_appearance ();
+                    vte.set_appearance ();
                 }
             );
 
-            if (bin.profile.color_scheme == "system") {
+            if (vte.profile.color_scheme == "system") {
                 this.notify["system-color"].connect(
                     (_settings, _pspec) => {
-                        bin.set_appearance ();
+                        vte.set_appearance ();
                     }
                 );
             }
 
             this.notify["use-profile-color"].connect(
                 (_settings, _pspec) => {
-                    bin.set_appearance ();
+                    vte.set_appearance ();
                 }
             );
             this.notify["opacity"].connect(
                 (_settings, _pspec) => {
-                    bin.set_appearance ();
+                    vte.set_appearance ();
                 }
             );
         }
@@ -99,6 +99,7 @@ namespace StillTerminal {
             settings.bind ("use-custom-font", general.appearance_group.use_custom_font, "active", SettingsBindFlags.DEFAULT);
             settings.bind ("use-custom-font", general.appearance_group.custom_font, "sensitive", SettingsBindFlags.DEFAULT);
             settings.bind ("bold-is-bright", general.appearance_group.bold_is_bright, "active", SettingsBindFlags.DEFAULT);
+            settings.bind ("show-scrollbar", general.appearance_group.show_scrollbars, "active", SettingsBindFlags.INVERT_BOOLEAN);
 
             // Connecting dropdown to system color
             general.appearance_group.scheme_setting_changed(this.settings, "system-color");
@@ -128,6 +129,20 @@ namespace StillTerminal {
                     general.appearance_group.font_setting_changed(this.settings, key);
                 }
             });
+        }
+
+        public void bind_to_shortcut_controller (ShortcutController controller) {
+            settings.bind ("shortcut-new-tab", controller, "new-tab", SettingsBindFlags.DEFAULT);
+            settings.bind ("shortcut-close-tab", controller, "close-tab", SettingsBindFlags.DEFAULT);
+            settings.bind ("shortcut-next-tab", controller, "next-tab", SettingsBindFlags.DEFAULT);
+            settings.bind ("shortcut-previous-tab", controller, "previous-tab", SettingsBindFlags.DEFAULT);
+            settings.bind ("shortcut-copy", controller, "copy", SettingsBindFlags.DEFAULT);
+            settings.bind ("shortcut-paste", controller, "paste", SettingsBindFlags.DEFAULT);
+            settings.bind ("shortcut-fullscreen", controller, "fullscreen", SettingsBindFlags.DEFAULT);
+            settings.bind ("shortcut-new-window", controller, "new-window", SettingsBindFlags.DEFAULT);
+            settings.bind ("shortcut-preferences", controller, "preferences", SettingsBindFlags.DEFAULT);
+            settings.bind ("shortcut-zoom-in", controller, "zoom-in", SettingsBindFlags.DEFAULT);
+            settings.bind ("shortcut-zoom-out", controller, "zoom-out", SettingsBindFlags.DEFAULT);
         }
     }
 }

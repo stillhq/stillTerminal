@@ -9,10 +9,7 @@ public class StillTerminal.App : Adw.Application {
     }
 
     protected override void activate () {
-        var win = this.get_active_window ();
-        if (win == null) {
-            win = new MainWindow (this);
-        }
+        var win = new MainWindow (this);
         win.present ();
     }
 
