@@ -131,6 +131,20 @@ namespace StillTerminal {
             });
         }
 
+        public void refresh_accelerators (Gtk.Application app) {
+            app.set_accels_for_action ("app.new-tab", settings.get_strv ("shortcut-new-tab"));
+            app.set_accels_for_action ("app.close-tab", settings.get_strv ("shortcut-close-tab"));
+            app.set_accels_for_action ("app.next-tab", settings.get_strv ("shortcut-next-tab"));
+            app.set_accels_for_action ("app.previous-tab", settings.get_strv ("shortcut-previous-tab"));
+            app.set_accels_for_action ("app.copy", settings.get_strv ("shortcut-copy"));
+            app.set_accels_for_action ("app.paste", settings.get_strv ("shortcut-paste"));
+            app.set_accels_for_action ("app.fullscreen", settings.get_strv ("shortcut-fullscreen"));
+            app.set_accels_for_action ("app.new-window", settings.get_strv ("shortcut-new-window"));
+            app.set_accels_for_action ("app.preferences", settings.get_strv ("shortcut-preferences"));
+            app.set_accels_for_action ("app.zoom-in", settings.get_strv ("shortcut-zoom-in"));
+            app.set_accels_for_action ("app.zoom-out", settings.get_strv ("shortcut-zoom-out"));
+        }
+
         public void bind_to_shortcut_controller (ShortcutController controller) {
             settings.bind ("shortcut-new-tab", controller, "new-tab", SettingsBindFlags.DEFAULT);
             settings.bind ("shortcut-close-tab", controller, "close-tab", SettingsBindFlags.DEFAULT);

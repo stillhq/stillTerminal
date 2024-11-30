@@ -39,7 +39,7 @@ namespace StillTerminal {
             new_tab_action.activate.connect (() => {
                 this.add_tab (get_default_profile ());
             });
-            this.add_action (new_tab_action);
+            app.add_action (new_tab_action);
     
             var close_tab_action = new SimpleAction ("close-tab", null);
             close_tab_action.activate.connect (() => {
@@ -49,7 +49,7 @@ namespace StillTerminal {
                     this.close ();
                 }
             });
-            this.add_action (close_tab_action);
+            app.add_action (close_tab_action);
             
             var next_tab_action = new SimpleAction ("next-tab", null);
             next_tab_action.activate.connect (() => {
@@ -59,7 +59,7 @@ namespace StillTerminal {
                 );
                 this.tab_view.set_selected_page (next_page);
             });
-            this.add_action (next_tab_action);
+            app.add_action (next_tab_action);
     
             var previous_tab_action = new SimpleAction ("previous-tab", null);
             previous_tab_action.activate.connect (() => {
@@ -69,61 +69,63 @@ namespace StillTerminal {
                 );
                 this.tab_view.set_selected_page (previous_page);
             });
-            this.add_action (previous_tab_action);
+            app.add_action (previous_tab_action);
     
             var copy_action = new SimpleAction ("copy", null);
             copy_action.activate.connect (() => {
                 this.get_current_terminal_page ().terminal.copy_clipboard ();
             });
-            this.add_action (copy_action);
+            app.add_action (copy_action);
     
             var paste_action = new SimpleAction ("paste", null);
             paste_action.activate.connect (() => {
                 this.get_current_terminal_page ().terminal.paste_clipboard ();
             });
-            this.add_action (paste_action);
+            app.add_action (paste_action);
     
             var fullscreen_action = new SimpleAction ("fullscreen", null);
             fullscreen_action.activate.connect (() => {
                 this.fullscreen ();
             });
-            this.add_action (fullscreen_action);
+            app.add_action (fullscreen_action);
     
             var new_window_action = new SimpleAction ("new-window", null);
             new_window_action.activate.connect (() => {
                 var win = new MainWindow (this.get_application () as Adw.Application);
                 win.present ();
             });
-            this.add_action (new_window_action);
+            app.add_action (new_window_action);
             
             var quit_action = new SimpleAction ("preferences", null);
             quit_action.activate.connect (() => {
                 var dialog = new StPrefsDialog (this);
                 dialog.present (this);
             });
-            this.add_action (quit_action);
+            app.add_action (quit_action);
     
             var zoom_in_action = new SimpleAction ("zoom-in", null);
             zoom_in_action.activate.connect (() => {
                 this.get_current_terminal_page ().modify_zoom (0.1);
             });
-            this.add_action (zoom_in_action);
+            app.add_action (zoom_in_action);
     
             var zoom_out_action = new SimpleAction ("zoom-out", null);
             zoom_out_action.activate.connect (() => {
                 this.get_current_terminal_page ().modify_zoom (-0.1);
             });
-            this.add_action (zoom_out_action);
+            app.add_action (zoom_out_action);
+
+            this.settings.refresh_accelerators(app);
             
             // SHORTCUTS
-            this.add_controller (shortcuts.controller);
-            this.settings.bind_to_shortcut_controller (shortcuts);
-            this.shortcuts.refresh_shortcuts ();
+            //  this.add_controller (shortcuts.controller);
+            //  this.settings.bind_to_shortcut_controller (shortcuts);
+            //  this.shortcuts.refresh_shortcuts ();
         }
     
         public Adw.TabPage add_tab (StProfile profile) {
             var page = new StTerminalPage (this.settings, profile);
-            Adw.TabPage tab_page = this.tab_view.append (page.scrolled_window);
+            Adw.TabPage tab_page = this.tab_view.append (page);
             tab_page.title = profile.name;
             page.terminal.set_tab_page (tab_page);
             this.tab_view.set_selected_page (tab_page);
@@ -149,6 +151,7 @@ namespace StillTerminal {
         }
     
         public StTerminalPage get_current_terminal_page () {
+            stdout.printf("%s\n", this.tab_view.get_selected_page ().get_type().name());
             return this.tab_view.get_selected_page ().get_child () as StTerminalPage;
         }
     

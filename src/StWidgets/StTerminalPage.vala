@@ -20,27 +20,28 @@ namespace StillTerminal {
         }
     }
 
-    public class StTerminalPage : GLib.Object {
+    public class StTerminalPage : Adw.Bin {
         public Adw.StyleManager style_manager;
         public StTerminal terminal;
         public Gtk.ScrolledWindow scrolled_window;
         public DynamicStyleManager dynamic_style_manager = new DynamicStyleManager ();
 
         public StTerminalPage (StSettings settings, StProfile profile) {
-            terminal = new StTerminal (settings, profile);
+            this.terminal = new StTerminal (settings, profile);
             scrolled_window = new Gtk.ScrolledWindow();
             scrolled_window.add_css_class("terminal-scrolled-window");
             scrolled_window.set_overlay_scrolling (true);
-            this.set_scrollbar_visibility(settings.show_scrollbar);
-            scrolled_window.set_child (terminal);
+            this.set_scrollbar_visibility (settings.show_scrollbar);
+            scrolled_window.set_child (this.terminal);
 
             this.style_manager = Adw.StyleManager.get_default ();
 
-            settings.settings.changed.connect((key) => {
+            settings.settings.changed.connect ((key) => {
                 if (key == "show-scrollbar") {
-                    this.set_scrollbar_visibility(settings.show_scrollbar);
+                    this.set_scrollbar_visibility (settings.show_scrollbar);
                 }
             });
+            this.set_child(scrolled_window);
         }
 
         public void modify_zoom (double zoom) {

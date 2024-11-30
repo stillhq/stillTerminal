@@ -404,10 +404,10 @@ namespace StillTerminal {
 
         // THIS IS FOR TESTING PURPOSES
         // TODO: Remove this
-        available_schemes["Adwaita"] = "/home/cameronknauff/Documents/stillTerminal/data/schemes/Adwaita.json";
-        available_schemes["Fedora"] = "/home/cameronknauff/Documents/stillTerminal/data/schemes/Fedora.json";
-        available_schemes["Ubuntu"] = "/home/cameronknauff/Documents/stillTerminal/data/schemes/Ubuntu.json";
-        available_schemes["Debian"] = "/home/cameronknauff/Documents/stillTerminal/data/schemes/Debian.json";
+        available_schemes["Adwaita"] = "/home/cameron/Documents/stillOS/stillTerminal/data/schemes/Adwaita.json";
+        available_schemes["Fedora"] = "/home/cameron/Documents/stillOS/stillTerminal/data/schemes/Fedora.json";
+        available_schemes["Ubuntu"] = "/home/cameron/Documents/stillOS/stillTerminal/data/schemes/Ubuntu.json";
+        available_schemes["Debian"] = "/home/cameron/Documents/stillOS/stillTerminal/data/schemes/Debian.json";
         // available_schemes["RedHat"] = "/home/cameronknauff/Documents/stillTerminal/data/schemes/RedHat.json";
         
         string[] dirs = get_scheme_dirs();
@@ -415,7 +415,7 @@ namespace StillTerminal {
             foreach (string dir_path in dirs) {
                 GLib.Dir dir = GLib.Dir.open(dir_path);
                 string? filename = dir.read_name();
-                while (filename != null) {
+                while (filename  != null) {
                     if (filename.has_suffix(".json")) {
                         // try loading json to check if it's valid
                         try {

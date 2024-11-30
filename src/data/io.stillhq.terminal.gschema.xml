@@ -86,58 +86,58 @@
       <summary>Notification on Finished Task</summary>
       <description>Sends a notification when the terminal is not focused and a task has finished.</description>
     </key>
-    <key name="shortcut-new-tab" type="s">
-      <default>'&lt;Control&gt;&lt;Shift&gt;t'</default>
+    <key name="shortcut-new-tab" type="as">
+      <default>['&lt;Control&gt;&lt;Shift&gt;t']</default>
       <summary>Create new tab</summary>
       <description>Keyboard shortcut to create a new terminal tab</description>
     </key>
-    <key name="shortcut-close-tab" type="s">
-      <default>'&lt;Control&gt;&lt;Shift&gt;w'</default>
+    <key name="shortcut-close-tab" type="as">
+      <default>['&lt;Control&gt;&lt;Shift&gt;w']</default>
       <summary>Close current tab</summary>
       <description>Keyboard shortcut to close the current terminal tab</description>
     </key>
-    <key name="shortcut-next-tab" type="s">
-      <default>'&lt;Control&gt;Tab'</default>
+    <key name="shortcut-next-tab" type="as">
+      <default>['&lt;Control&gt;Tab']</default>
       <summary>Switch to next tab</summary>
       <description>Keyboard shortcut to switch to the next terminal tab</description>
     </key>
-    <key name="shortcut-previous-tab" type="s">
-      <default>'&lt;Control&gt;&lt;Shift&gt;Tab'</default>
+    <key name="shortcut-previous-tab" type="as">
+      <default>['&lt;Control&gt;&lt;Shift&gt;Tab']</default>
       <summary>Switch to previous tab</summary>
       <description>Keyboard shortcut to switch to the previous terminal tab</description>
     </key>
-    <key name="shortcut-copy" type="s">
-      <default>'&lt;Control&gt;&lt;Shift&gt;c'</default>
+    <key name="shortcut-copy" type="as">
+      <default>['&lt;Control&gt;&lt;Shift&gt;c']</default>
       <summary>Copy selection</summary>
       <description>Keyboard shortcut to copy selected text</description>
     </key>
-    <key name="shortcut-paste" type="s">
-      <default>'&lt;Control&gt;&lt;Shift&gt;v'</default>
+    <key name="shortcut-paste" type="as">
+      <default>['&lt;Control&gt;&lt;Shift&gt;v']</default>
       <summary>Paste clipboard</summary>
       <description>Keyboard shortcut to paste text from clipboard</description>
     </key>
-    <key name="shortcut-fullscreen" type="s">
-      <default>'F11'</default>
+    <key name="shortcut-fullscreen" type="as">
+      <default>['F11']</default>
       <summary>Toggle fullscreen</summary>
       <description>Keyboard shortcut to toggle fullscreen mode</description>
     </key>
-    <key name="shortcut-new-window" type="s">
-      <default>'&lt;Control&gt;n'</default>
+    <key name="shortcut-new-window" type="as">
+      <default>['&lt;Control&gt;n']</default>
       <summary>New window</summary>
       <description>Keyboard shortcut to open a new terminal window</description>
     </key>
-    <key name="shortcut-preferences" type="s">
-      <default>'&lt;Control&gt;comma'</default>
+    <key name="shortcut-preferences" type="as">
+      <default>['&lt;Control&gt;comma']</default>
       <summary>Open preferences</summary>
       <description>Keyboard shortcut to open preferences dialog</description>
     </key>
-    <key name="shortcut-zoom-in" type="s">
-      <default>'&lt;Control&gt;&lt;Shift&gt;plus'</default>
+    <key name="shortcut-zoom-in" type="as">
+      <default>['&lt;Control&gt;&lt;Shift&gt;plus']</default>
       <summary>Zoom in</summary>
       <description>Keyboard shortcut to increase terminal font size</description>
     </key>
-    <key name="shortcut-zoom-out" type="s">
-      <default>'&lt;Control&gt;minus'</default>
+    <key name="shortcut-zoom-out" type="as">
+      <default>['&lt;Control&gt;minus']</default>
       <summary>Zoom out</summary>
       <description>Keyboard shortcut to decrease terminal font size</description>
     </key>

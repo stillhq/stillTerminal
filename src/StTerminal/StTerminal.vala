@@ -117,6 +117,7 @@ namespace StillTerminal {
             Gdk.RGBA[] palette;
 
             if (is_dark) {
+                print(color_scheme.dark_bold_color);
                 bold_color.parse ( color_scheme.dark_bold_color );
                 cursor_color.parse ( color_scheme.dark_cursor_color );
                 background_color.parse ( color_scheme.dark_background_color );

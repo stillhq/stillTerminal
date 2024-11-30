@@ -12,5 +12,6 @@
     <file preprocess="xml-stripblanks">icons/opensuse.svg</file>
     <file preprocess="xml-stripblanks">icons/ubuntu.svg</file>
     <file preprocess="xml-stripblanks">icons/redhat.svg</file>
+    <file preprocess="xml-stripblanks">icons/settings-symbolic.svg</file>
   </gresource>
 </gresources>

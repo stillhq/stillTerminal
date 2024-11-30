@@ -1,5 +1,7 @@
 namespace StillTerminal {
     public class ShortcutController : GLib.Object {
+        public bool shortcuts_added = false;
+
         public string new_tab { get; set; default = "<Control><Shift>t"; }
         public string close_tab { get; set; default = "<Control><Shift>w"; }
         public string next_tab { get; set; default = "<Control>Tab"; }
@@ -46,6 +48,13 @@ namespace StillTerminal {
                     shortcut.set_trigger(trigger);
                 }
             }
+            foreach (Gtk.Shortcut shortcut in shortcuts) {
+                if (this.shortcuts_added) {
+                    this.controller.remove_shortcut(shortcut);
+                }
+                this.controller.add_shortcut (shortcut);
+            }
+            this.shortcuts_added = true;
         }
 
         public ShortcutController() {
@@ -68,9 +77,6 @@ namespace StillTerminal {
             };
 
             refresh_shortcuts ();
-            foreach (Gtk.Shortcut shortcut in shortcuts) {
-                this.controller.add_shortcut (shortcut);
-            }
         }
     }
 }
